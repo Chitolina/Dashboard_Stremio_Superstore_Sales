@@ -11,8 +11,12 @@ sns.set_style("whitegrid")
 # Função para carregar dados com cache
 @st.cache_data
 def load_data():
-    path = r"C:\Python_projetos\Superstore_df\df\Sample_Superstore.csv"
-    df = pd.read_csv(path, delimiter=',', encoding='latin1')
+    # Arquivo local
+    #path = r"C:\Python_projetos\Superstore_df\df\Sample_Superstore.csv"
+    #df = pd.read_csv(path, delimiter=',', encoding='latin1')
+    # Arquivo no git
+    url = 'https://raw.githubusercontent.com/Chitolina/Dashboard_Stremio_Superstore_Sales/main/df/Sample_Superstore.csv'
+    df = pd.read_csv(url, delimiter=',', encoding='latin1')
     
     # Função para corrigir datas
     def corrigir_data(data_str):
