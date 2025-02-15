@@ -15,7 +15,7 @@ def load_data():
     #path = r"C:\Python_projetos\Superstore_df\df\Sample_Superstore.csv"
     #df = pd.read_csv(path, delimiter=',', encoding='latin1')
     # Arquivo no git
-    url = 'https://raw.githubusercontent.com/Chitolina/Dashboard_Stremio_Superstore_Sales/120a03252011db6c269078486f0f72e4d3de5cc3/df/Sample_Superstore.csv'
+    url = 'https://raw.githubusercontent.com/Chitolina/Dashboard_Stremio_Superstore_Sales/main/df/Sample_Superstore.csv'
     df = pd.read_csv(url, delimiter=',', encoding='latin1')
 
 
