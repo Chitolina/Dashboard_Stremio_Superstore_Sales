@@ -49,18 +49,23 @@ def load_data():
     }
 
     subcategory_translation = {
-        'Binders': 'Pastas',
         'Bookcases': 'Estantes',
         'Chairs': 'Cadeiras',
-        'Copiers': 'Copiadoras',
-        'Envelopes': 'Envelopes',
         'Labels': 'Etiquetas',
-        'Machines': 'Máquinas',
-        'Paper': 'Papel',
+        'Tables': 'Mesas',
         'Storage': 'Armazenamento',
-        'Phones': 'Telefones',
+        'Furnishings': 'Mobiliário',
         'Art': 'Arte',
-        'Appliances': 'Eletrodomésticos'
+        'Phones': 'Telefones',
+        'Binders': 'Pastas',
+        'Appliances': 'Eletrodomésticos',
+        'Paper': 'Papel',
+        'Accessories': 'Acessórios',
+        'Envelopes': 'Envelopes',
+        'Fasteners': 'Fixadores',
+        'Supplies': 'Suprimentos',
+        'Machines': 'Máquinas',
+        'Copiers': 'Copiadoras'
     }
 
     # Traduzindo os nomes das colunas
