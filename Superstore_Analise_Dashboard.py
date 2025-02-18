@@ -854,7 +854,7 @@ with tab6:
     features_scaled = scaler.fit_transform(features)
     
     # Aplicando KMeans para clusterização
-    kmeans = KMeans(n_clusters=3, random_Estado=42)
+    kmeans = KMeans(n_clusters=3, random_state=42)
     cluster_data['Cluster'] = kmeans.fit_predict(features_scaled)
     
     # Gerando o gráfico de clusterização
