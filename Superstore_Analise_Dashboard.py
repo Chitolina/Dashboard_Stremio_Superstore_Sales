@@ -463,10 +463,10 @@ with tab3:
     # Plotar gráfico
     fig3, ax3 = plt.subplots(figsize=(14, 6))
     scatter = sns.scatterplot(data=top_Vendas, x='Vendas', y='Lucro', 
-                             hue='Subcategoria', size='Vendas', sizes=(50, 500),
+                             hue='Subcategoria', size='Vendas', sizes=(50, 200),
                              palette='Paired', alpha=0.7, edgecolor='black')
     
-    # Adicionar as porcentagens de lucro acima das bolinhas com tamanho menor e mais acima
+    # Adicionar as porcentagens de lucro acima das bolinhas
     for i, row in top_Vendas.iterrows():
         ax3.text(row['Vendas'], row['Lucro'] + 4000,
                  f"{row['Margem de Lucro %']:.1f}%", 
@@ -478,8 +478,9 @@ with tab3:
     ax3.xaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{x/1000:.0f}k'))
     ax3.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{x/1000:.0f}k'))
     
-    # plt.title('Faturamento vs Lucratividade', fontsize=16)
-    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    # Ajustar a posição da legenda e seu tamanho
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=10, title='Subcategoria')
+    
     st.pyplot(fig3)
     
     # Nota técnica
