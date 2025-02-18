@@ -12,7 +12,7 @@ sns.set_style("whitegrid")
 @st.cache_data
 def load_data():
     # URL do arquivo
-    url = 'https://raw.githubusercontent.com/Chitolina/Dashboard_Stremio_Superstore_Sales/main/df/Sample_Superstore.csv'
+    url = 'https://raw.githubusercontent.com/Chitolina/Dashboard_Stremio_Superstore_Vendas/main/df/Sample_Superstore.csv'
     df = pd.read_csv(url, delimiter=',', encoding='latin1')
     
     # Função para corrigir datas
@@ -27,10 +27,10 @@ def load_data():
     df = df.dropna(subset=['Order Date'])
     df['Month'] = df['Order Date'].dt.month
     df['Year'] = df['Order Date'].dt.year
-    df['Profit Margin'] = df['Profit'] / df['Sales']  # Nova coluna
+    df['Lucro Margin'] = df['Lucro'] / df['Vendas']  # Nova coluna
     
     # Traduzindo valores das colunas 'Region', 'Category' e 'Sub-Category'
-    region_translation = {
+    Região_translation = {
         'Northeast': 'Nordeste',
         'South': 'Sul',
         'Midwest': 'Centro-Oeste',
@@ -89,7 +89,7 @@ def load_data():
     
     # Aplicando a tradução dos valores nas colunas 'Região', 'Categoria', 'Subcategoria'
     if 'Região' in df.columns:
-        df['Região'] = df['Região'].map(region_translation).fillna(df['Região'])
+        df['Região'] = df['Região'].map(Região_translation).fillna(df['Região'])
     
     if 'Categoria' in df.columns:
         df['Categoria'] = df['Categoria'].map(category_translation).fillna(df['Categoria'])
@@ -348,21 +348,21 @@ with tab3:
     """)
     
     # Calcular Vendas e Lucro por Categoria
-    sales_profit_by_category = df.groupby('Categoria')[['Vendas', 'Lucro']].sum().reset_index()
+    Vendas_Lucro_by_category = df.groupby('Categoria')[['Vendas', 'Lucro']].sum().reset_index()
     
     # Criar gráfico de barras lado a lado
     fig1, ax1 = plt.subplots(figsize=(12, 6))
     bar_width = 0.35
-    categories = sales_profit_by_category['Categoria']
+    categories = Vendas_Lucro_by_category['Categoria']
     x = np.arange(len(categories))  # Posições das barras
     
     # Definir cores mais suaves e harmoniosas
     colors = ['#4C72B0', '#55A868']  # Azul e verde
     
     # Criar barras lado a lado
-    bars1 = ax1.bar(x - bar_width/2, sales_profit_by_category['Vendas'], width=bar_width, 
+    bars1 = ax1.bar(x - bar_width/2, Vendas_Lucro_by_category['Vendas'], width=bar_width, 
                     label='Vendas', color=colors[0], alpha=0.85)
-    bars2 = ax1.bar(x + bar_width/2, sales_profit_by_category['Lucro'], width=bar_width, 
+    bars2 = ax1.bar(x + bar_width/2, Vendas_Lucro_by_category['Lucro'], width=bar_width, 
                     label='Lucro', color=colors[1], alpha=0.85)
     
     # Adicionar rótulos com melhor posicionamento
@@ -398,19 +398,19 @@ with tab3:
     """)
     
     # Calcular vendas e lucros por subcategoria
-    top8_sales = df.groupby(['Categoria', 'Subcategoria'])[['Vendas', 'Lucro']].sum().nlargest(8, 'Vendas').reset_index()
+    top8_Vendas = df.groupby(['Categoria', 'Subcategoria'])[['Vendas', 'Lucro']].sum().nlargest(8, 'Vendas').reset_index()
     
     # Criar rótulo combinando Subcategoria + Categoria
-    top8_sales['Label'] = top8_sales['Subcategoria'] + " (" + top8_sales['Categoria'] + ")"
+    top8_Vendas['Label'] = top8_Vendas['Subcategoria'] + " (" + top8_Vendas['Categoria'] + ")"
     
     # Gráfico
     fig, ax = plt.subplots(figsize=(14, 8))  
     bar_width = 0.3  
-    y_pos = np.arange(len(top8_sales))
+    y_pos = np.arange(len(top8_Vendas))
     
     # Criar barras de vendas e lucros
-    ax.barh(y_pos - bar_width/2, top8_sales['Vendas'], height=bar_width, label='Vendas', color='#4C72B0', alpha=0.85)
-    ax.barh(y_pos + bar_width/2, top8_sales['Lucro'], height=bar_width, label='Lucro', color='#55A868', alpha=0.85)
+    ax.barh(y_pos - bar_width/2, top8_Vendas['Vendas'], height=bar_width, label='Vendas', color='#4C72B0', alpha=0.85)
+    ax.barh(y_pos + bar_width/2, top8_Vendas['Lucro'], height=bar_width, label='Lucro', color='#55A868', alpha=0.85)
     
     # Adicionar rótulos nas barras
     for bar in ax.patches:
@@ -418,7 +418,7 @@ with tab3:
     
     # Ajustar visualização
     ax.set_yticks(y_pos)
-    ax.set_yticklabels(top8_sales['Label'], fontsize=14)
+    ax.set_yticklabels(top8_Vendas['Label'], fontsize=14)
     ax.set_xlabel('Valor em $', fontsize=16)
     # ax.set_title('Comparação de Vendas e Lucro - Top 8 Subcategorias', fontsize=18, pad=20)
     
@@ -441,19 +441,19 @@ with tab3:
     """)
     
     # Calcular dados
-    top_sales = df.groupby('Subcategoria').agg({'Vendas':'sum', 'Lucro':'sum'}).reset_index()
+    top_Vendas = df.groupby('Subcategoria').agg({'Vendas':'sum', 'Lucro':'sum'}).reset_index()
     
     # Calcular a porcentagem de lucro sobre as vendas
-    top_sales['Margem de Lucro %'] = (top_sales['Lucro'] / top_sales['Vendas']) * 100
+    top_Vendas['Margem de Lucro %'] = (top_Vendas['Lucro'] / top_Vendas['Vendas']) * 100
     
     # Plotar gráfico
     fig3, ax3 = plt.subplots(figsize=(14, 6))
-    scatter = sns.scatterplot(data=top_sales, x='Vendas', y='Lucro', 
+    scatter = sns.scatterplot(data=top_Vendas, x='Vendas', y='Lucro', 
                              hue='Subcategoria', size='Vendas', sizes=(50, 500),
                              palette='Paired', alpha=0.7, edgecolor='black')
     
     # Adicionar as porcentagens de lucro acima das bolinhas com tamanho menor e mais acima
-    for i, row in top_sales.iterrows():
+    for i, row in top_Vendas.iterrows():
         ax3.text(row['Vendas'], row['Lucro'] + 4000,
                  f"{row['Margem de Lucro %']:.1f}%", 
                  horizontalalignment='center', verticalalignment='center', 
@@ -732,7 +732,7 @@ with tab5:
         )
 
     # Mapeamento de Região:
-    state_to_region = {
+    Estado_to_Região = {
         'Alabama': 'South', 'Alaska': 'West', 'Arizona': 'West', 'Arkansas': 'South',
         'California': 'West', 'Colorado': 'West', 'Connecticut': 'Northeast', 'Delaware': 'South',
         'Florida': 'South', 'Georgia': 'South', 'Hawaii': 'West', 'Idaho': 'West',
@@ -748,10 +748,10 @@ with tab5:
         'Wisconsin': 'Midwest', 'Wyoming': 'West'
     }
     if 'Região' not in df.columns:
-        df['Região'] = df['Estado'].map(state_to_region)
+        df['Região'] = df['Estado'].map(Estado_to_Região)
     
     # Define as cores para as regiões (mesmo que nem todas sejam usadas)
-    region_colors = {
+    Região_colors = {
             'Nordeste': '#1f77b4',  # Azul
             'Sul': '#ff7f0e',       # Laranja
             'Centro-Oeste': '#2ca02c',  # Verde
@@ -763,7 +763,7 @@ with tab5:
     alpha_val = 0.8  # Transparência para as barras
     
 with tab6:
-    st.markdown("## Análise Regional Estratégica")
+    st.markdown("## Análise Regiãoal Estratégica")
     sns.set_style("whitegrid")
     sns.set_context("talk")
     
@@ -773,17 +773,17 @@ with tab6:
     fig1, ax1 = plt.subplots(figsize=(12, 6))
     
     # Agrupa os dados por estado e região e soma os lucros
-    state_profit = df.groupby(['Estado', 'Região'])['Lucro'].sum().reset_index()  # Ajustando nomes das colunas
-    top_states = state_profit.nsmallest(10, 'Lucro')  # Alterando para 'Lucro', conforme renomeação
+    Estado_Lucro = df.groupby(['Estado', 'Região'])['Lucro'].sum().reset_index()  # Ajustando nomes das colunas
+    top_Estados = Estado_Lucro.nsmallest(10, 'Lucro')  # Alterando para 'Lucro', conforme renomeação
     
     # Estilização do gráfico
     sns.set_style("whitegrid")
     barplot1 = sns.barplot(
-        data=top_states, 
+        data=top_Estados, 
         x='Lucro',  # Ajustando para a nova coluna
         y='Estado',  # Ajustando para a nova coluna
         hue='Região',  # Ajustando para a nova coluna
-        palette=region_colors, 
+        palette=Região_colors, 
         ax=ax1,
         edgecolor='black',
         linewidth=1.2
@@ -815,9 +815,9 @@ with tab6:
     # ====================================================
     # Gráfico 2: Desempenho de Vendas por Região
     st.markdown("### Desempenho de Vendas por Região")
-    sales_by_region = df.groupby('Região')[['Vendas', 'Lucro']].sum().reset_index().sort_values(by='Vendas', ascending=False)  # Ajustando nomes das colunas
+    Vendas_by_Região = df.groupby('Região')[['Vendas', 'Lucro']].sum().reset_index().sort_values(by='Vendas', ascending=False)  # Ajustando nomes das colunas
     fig2, ax2 = plt.subplots(figsize=(10, 6))
-    barplot2 = sns.barplot(data=sales_by_region, x='Região', y='Vendas', palette=region_colors, ax=ax2)  # Alterando para 'Vendas'
+    barplot2 = sns.barplot(data=Vendas_by_Região, x='Região', y='Vendas', palette=Região_colors, ax=ax2)  # Alterando para 'Vendas'
     for patch in ax2.patches:
         patch.set_alpha(alpha_val)
     # Adiciona os valores sobre as barras
@@ -843,45 +843,45 @@ with tab6:
     # ====================================================
     # Gráfico 3: Clusterização dos Estados por Desempenho
     # Agrupar os dados por estado e região
-    cluster_data = df.groupby(['State', 'Region']).agg({'Sales': 'sum', 'Profit': 'sum'}).reset_index()
+    cluster_data = df.groupby(['Estado', 'Região']).agg({'Vendas': 'sum', 'Lucro': 'sum'}).reset_index()
 
     # Calculando a margem
-    cluster_data['Margin'] = (cluster_data['Profit'] / cluster_data['Sales']) * 100
+    cluster_data['Margin'] = (cluster_data['Lucro'] / cluster_data['Vendas']) * 100
     
     # Normalizando os dados para clusterização
-    features = cluster_data[['Sales', 'Profit', 'Margin']]
+    features = cluster_data[['Vendas', 'Lucro', 'Margin']]
     scaler = StandardScaler()
     features_scaled = scaler.fit_transform(features)
     
     # Aplicando KMeans para clusterização
-    kmeans = KMeans(n_clusters=3, random_state=42)
+    kmeans = KMeans(n_clusters=3, random_Estado=42)
     cluster_data['Cluster'] = kmeans.fit_predict(features_scaled)
     
     # Gerando o gráfico de clusterização
     fig3, ax3 = plt.subplots(figsize=(12, 8))
     
     # Scatter plot com base no cluster
-    scatter = sns.scatterplot(data=cluster_data, x='Sales', y='Profit', hue='Cluster', palette="Set1", s=150, ax=ax3, alpha=0.7)
+    scatter = sns.scatterplot(data=cluster_data, x='Vendas', y='Lucro', hue='Cluster', palette="Set1", s=150, ax=ax3, alpha=0.7)
     
     # Identificando os centroids
     centroids = kmeans.cluster_centers_
     centroids = scaler.inverse_transform(centroids)
     
     # Identificando os estados exemplares para cada cluster
-    cluster_0_states = cluster_data[cluster_data['Cluster'] == 0].head(2)
-    cluster_1_states = cluster_data[cluster_data['Cluster'] == 1].head(2)
-    cluster_2_states = cluster_data[cluster_data['Cluster'] == 2].head(2)
+    cluster_0_Estados = cluster_data[cluster_data['Cluster'] == 0].head(2)
+    cluster_1_Estados = cluster_data[cluster_data['Cluster'] == 1].head(2)
+    cluster_2_Estados = cluster_data[cluster_data['Cluster'] == 2].head(2)
     
     # Função para ajustar os textos e bolinhas
-    def adjust_text_position(state_data, ax, cluster_color):
-        for _, row in state_data.iterrows():
-            ax.scatter(row['Sales'], row['Profit'], s=150, color=cluster_color, alpha=0.7)  # Bolinhas com a cor do cluster
-            ax.text(row['Sales'], row['Profit'] + 150, row['State'], fontsize=10, ha='center', color='black', fontweight='light')
+    def adjust_text_position(Estado_data, ax, cluster_color):
+        for _, row in Estado_data.iterrows():
+            ax.scatter(row['Vendas'], row['Lucro'], s=150, color=cluster_color, alpha=0.7)  # Bolinhas com a cor do cluster
+            ax.text(row['Vendas'], row['Lucro'] + 150, row['Estado'], fontsize=10, ha='center', color='black', fontweight='light')
     
     # Adicionando as bolinhas maiores com nomes dos estados
-    adjust_text_position(cluster_0_states, ax3, 'red')
-    adjust_text_position(cluster_1_states, ax3, 'blue')
-    adjust_text_position(cluster_2_states, ax3, 'green')
+    adjust_text_position(cluster_0_Estados, ax3, 'red')
+    adjust_text_position(cluster_1_Estados, ax3, 'blue')
+    adjust_text_position(cluster_2_Estados, ax3, 'green')
     
     # Ajustando o gráfico
     ax3.set_xlabel("Vendas Totais (K)", fontsize=14)
@@ -920,22 +920,22 @@ with tab6:
     st.markdown("### Heatmap de Correlações por Região")
 
     # Criando uma lista de regiões para iterar
-    regions = df['Region'].unique()
+    Regiãos = df['Região'].unique()
     
     # Definindo o número de colunas de subgráficos (para exibir lado a lado)
-    n_cols = len(regions)
+    n_cols = len(Regiãos)
     fig, axes = plt.subplots(1, n_cols, figsize=(5 * n_cols, 5))  # Ajuste de tamanho para o número de regiões
     
     # Iterando por cada região para calcular as correlações e gerar o heatmap
-    for i, region in enumerate(regions):
-        region_data = df[df['Region'] == region]
+    for i, Região in enumerate(Regiãos):
+        Região_data = df[df['Região'] == Região]
     
-        # Calculando a matriz de correlação para 'Sales' e 'Profit'
-        corr_matrix = region_data[['Sales', 'Profit']].corr()
+        # Calculando a matriz de correlação para 'Vendas' e 'Lucro'
+        corr_matrix = Região_data[['Vendas', 'Lucro']].corr()
     
         # Plotando o heatmap
         sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0, fmt='.2f', linewidths=2, vmin=-1, vmax=1, ax=axes[i])
-        axes[i].set_title(f'Relação {region}', fontsize=12)
+        axes[i].set_title(f'Relação {Região}', fontsize=12)
         axes[i].set_xticklabels(axes[i].get_xticklabels(), rotation=45, ha='right')
         axes[i].set_yticklabels(axes[i].get_yticklabels(), rotation=45, va='top')
     
