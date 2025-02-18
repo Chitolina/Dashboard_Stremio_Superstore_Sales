@@ -27,7 +27,7 @@ def load_data():
     df = df.dropna(subset=['Order Date'])
     df['Month'] = df['Order Date'].dt.month
     df['Year'] = df['Order Date'].dt.year
-    df['Lucro Margin'] = df['Lucro'] / df['Vendas']  # Nova coluna
+    df['Profit Margin'] = df['Profit'] / df['Sales']  # Nova coluna
     
     # Traduzindo valores das colunas 'Region', 'Category' e 'Sub-Category'
     region_translation = {
