@@ -347,7 +347,7 @@ st.markdown("---")
 
 st.write("**Fonte dos Dados:** [Kaggle - Superstore Dataset](https://www.kaggle.com/datasets/vivek468/superstore-dataset-final)")
 
-st.write("**Desenvolvido por:** [Lucas Chitolina¹](https://github.com/Chitolina), [Lucas Chitolina²](https://chitolina.github.io/), & [ChatGpt](https://chatgpt.com/)")
+st.write("**Desenvolvido por:** [Lucas Chitolina¹](https://github.com/Chitolina), [Lucas Chitolina²](https://chitolina.github.io/), & [ChatGPT](https://chatgpt.com/)")
 
 # Terceira aba ===========================================================================
 with tab3:
