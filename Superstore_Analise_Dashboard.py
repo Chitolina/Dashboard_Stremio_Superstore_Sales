@@ -30,7 +30,7 @@ def load_data():
     df['Lucro Margin'] = df['Lucro'] / df['Vendas']  # Nova coluna
     
     # Traduzindo valores das colunas 'Region', 'Category' e 'Sub-Category'
-    Região_translation = {
+    region_translation = {
         'Northeast': 'Nordeste',
         'South': 'Sul',
         'Midwest': 'Centro-Oeste',
@@ -89,7 +89,7 @@ def load_data():
     
     # Aplicando a tradução dos valores nas colunas 'Região', 'Categoria', 'Subcategoria'
     if 'Região' in df.columns:
-        df['Região'] = df['Região'].map(Região_translation).fillna(df['Região'])
+        df['Região'] = df['Região'].map(region_translation).fillna(df['Região'])
     
     if 'Categoria' in df.columns:
         df['Categoria'] = df['Categoria'].map(category_translation).fillna(df['Categoria'])
