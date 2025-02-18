@@ -292,7 +292,7 @@ with tab2:
     - A inclinação **positiva** significa que à medida que as vendas aumentam, o lucro também tende a aumentar.
     - O grau de dispersão dos pontos ao redor da linha mostra o quanto os dados seguem essa tendência. 
         - Pontos espalhados, correlação fraca, pontos próximos à linha, correlação forte.
-        - Outra questão, quando as vendas são baixas, os **pontos estão concentrados**, indicando um **padrão estável de lucro**. 
+        - Outra questão, quando as vendas são baixas, os **pontos estão concentrados** próximos à linha de regressão, indicando um **padrão estável de lucro**. 
          Assim que as vendas aumentam, os pontos se tornam mais **dispersos**, sugerindo **maior variabilidade no lucro**. 
          Isso tem influência de descontos, variação da margem (podendo ser negativa por prejuízo, ou um outlier não tratado) e diferentes categorias de produtos (tecnologia é a que mais sofre com esse impacto). Esse padrão indica que vendas maiores podem ser mais imprevisíveis. 
     """)
@@ -404,10 +404,10 @@ with tab3:
 
     st.markdown("---")
 
-    # Seção 2 - Comparação de Vendas e Lucros por Categoria
+       # Seção 2 - Comparação de Vendas e Lucros por Categoria
     st.markdown("""
     ###  Top 8 Subcategorias
-    #### Maiores vendas e comparação com seus lucros:
+    #### Maiores vendas e comparação com seus lucros e margens
     - Nem sempre os produtos que mais vendem são os mais lucrativos. Fatores como margem de lucro, descontos, promoções e custos operacionais podem impactar na rentabilidade.
     """)
     
@@ -417,32 +417,45 @@ with tab3:
     # Criar rótulo combinando Subcategoria + Categoria
     top8_Vendas['Label'] = top8_Vendas['Subcategoria'] + " (" + top8_Vendas['Categoria'] + ")"
     
+    # Calcular margem de lucro (%)
+    top8_Vendas['Margem_Lucro'] = (top8_Vendas['Lucro'] / top8_Vendas['Vendas']) * 100
+    
     # Gráfico
-    fig, ax = plt.subplots(figsize=(14, 8))  
-    bar_width = 0.3  
+    fig, ax = plt.subplots(figsize=(14, 8))
+    bar_width = 0.3
     y_pos = np.arange(len(top8_Vendas))
     
     # Usar a paleta original, mas adicionar alpha e margens nas barras
     ax.barh(y_pos - bar_width/2, top8_Vendas['Vendas'], height=bar_width, label='Vendas', color='#4C72B0', alpha=0.85, edgecolor='white', linewidth=1.5)
     ax.barh(y_pos + bar_width/2, top8_Vendas['Lucro'], height=bar_width, label='Lucro', color='#55A868', alpha=0.85, edgecolor='white', linewidth=1.5)
     
-    # Adicionar rótulos nas barras
+    # Criar um segundo eixo para a margem de lucro
+    ax2 = ax.twiny()
+    ax2.plot(top8_Vendas['Margem_Lucro'], y_pos, "o-", color="red", label="Margem de Lucro (%)", alpha=0.8)
+    
+    # Adicionar rótulos de valores nas barras de Vendas e Lucro
     for bar in ax.patches:
         ax.text(bar.get_width() + 5000, bar.get_y() + bar.get_height()/2, f"${bar.get_width()/1000:.1f}k", va='center', fontsize=12, color='black')
+    
+    # Adicionar rótulos da margem de lucro
+    for i, (margem, y) in enumerate(zip(top8_Vendas['Margem_Lucro'], y_pos)):
+        ax2.text(margem + 1, y, f"{margem:.1f}%", va='center', fontsize=12, color="red")
     
     # Ajustar visualização
     ax.set_yticks(y_pos)
     ax.set_yticklabels(top8_Vendas['Label'], fontsize=14)
     ax.set_xlabel('Valor em $ (em k)', fontsize=16)
+    ax2.set_xlabel('Margem de Lucro (%)', fontsize=16, color='red')
     
     # Formatar os valores no eixo x
     ax.xaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{x/1000:.1f}k'))
     
     # Melhorar a legenda e posicionamento
-    ax.legend(title="Métrica", fontsize=14, title_fontsize=16, loc='upper left', bbox_to_anchor=(1, 1), ncol=1)
+    ax.legend(title="Métrica", fontsize=14, title_fontsize=16, loc='upper left', bbox_to_anchor=(1, 1))
+    ax2.legend(title="Margem de Lucro", fontsize=14, title_fontsize=16, loc='lower right')
     
     # Título mais atrativo
-    ax.set_title('Comparação de Vendas e Lucro - Top 8 Subcategorias', fontsize=18, pad=20)
+    ax.set_title('Comparação de Vendas, Lucro e Margem - Top 8 Subcategorias', fontsize=18, pad=20)
     
     # Adicionar grid no eixo x e remover bordas
     ax.grid(axis='x', linestyle='--', alpha=0.5)
@@ -450,13 +463,12 @@ with tab3:
     
     # Exibir gráfico no Streamlit
     st.pyplot(fig)
-
         
     st.markdown("---")
 
     # Seção 3 - Produtos Problemáticos
     st.markdown("""
-    ### Identificação de produtos pouco performáticos: 
+    ### Identificação de produtos pouco performáticos
     Podemos ver muitos produtos com alto volume de vendas, mas baixa lucratividade, alguns lucrando menos que 10% da venda (colocar gráfico em wide mode).
     """)
     
