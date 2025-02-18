@@ -11,10 +11,6 @@ sns.set_style("whitegrid")
 # Função para carregar dados com cache
 @st.cache_data
 def load_data():
-    # Arquivo local
-    #path = r"C:\Python_projetos\Superstore_df\df\Sample_Superstore.csv"
-    #df = pd.read_csv(path, delimiter=',', encoding='latin1')
-
     # URL do arquivo
     url = 'https://raw.githubusercontent.com/Chitolina/Dashboard_Stremio_Superstore_Sales/main/df/Sample_Superstore.csv'
     df = pd.read_csv(url, delimiter=',', encoding='latin1')
@@ -64,12 +60,47 @@ def load_data():
         'Appliances': 'Eletrodomésticos'
     }
 
-    # Aplicando a tradução nas colunas correspondentes
-    df['Região'] = df['Região'].map(region_translation)
-    df['Categoria'] = df['Categoria'].map(category_translation)
-    df['Subcategoria'] = df['Subcategoria'].map(subcategory_translation)
+    # Traduzindo os nomes das colunas
+    df = df.rename(columns={
+        'Region': 'Região',
+        'Category': 'Categoria',
+        'Sub-Category': 'Subcategoria',
+        'Order ID': 'ID da Ordem',
+        'Order Date': 'Data da Ordem',
+        'Ship Date': 'Data de Envio',
+        'Ship Mode': 'Modo de Envio',
+        'Customer ID': 'ID do Cliente',
+        'Customer Name': 'Nome do Cliente',
+        'Segment': 'Segmento',
+        'Country': 'País',
+        'City': 'Cidade',
+        'State': 'Estado',
+        'Postal Code': 'Código Postal',
+        'Product ID': 'ID do Produto',
+        'Product Name': 'Nome do Produto',
+        'Sales': 'Vendas',
+        'Quantity': 'Quantidade',
+        'Discount': 'Desconto',
+        'Profit': 'Lucro',
+        'Profit Margin': 'Margem de Lucro',
+        'Month': 'Mês',
+        'Year': 'Ano'
+    })
+    
+    # Aplicando a tradução dos valores nas colunas 'Região', 'Categoria', 'Subcategoria'
+    if 'Região' in df.columns:
+        df['Região'] = df['Região'].map(region_translation).fillna(df['Região'])
+    
+    if 'Categoria' in df.columns:
+        df['Categoria'] = df['Categoria'].map(category_translation).fillna(df['Categoria'])
+    
+    if 'Subcategoria' in df.columns:
+        df['Subcategoria'] = df['Subcategoria'].map(subcategory_translation).fillna(df['Subcategoria'])
 
     return df
+
+df = load_data()
+
 
 df = load_data()
 
