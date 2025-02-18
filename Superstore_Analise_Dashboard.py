@@ -33,28 +33,42 @@ def load_data():
     df['Year'] = df['Order Date'].dt.year
     df['Profit Margin'] = df['Profit'] / df['Sales']  # Nova coluna
     
-    # Tradução das colunas
-    traducoes = {
-        'Order ID': 'ID da Ordem', 'Order Date': 'Data da Ordem', 'Ship Date': 'Data de Envio',
-        'Ship Mode': 'Modo de Envio', 'Customer ID': 'ID do Cliente', 'Customer Name': 'Nome do Cliente',
-        'Segment': 'Segmento', 'Country': 'País', 'City': 'Cidade', 'State': 'Estado', 'Postal Code': 'Código Postal',
-        'Region': 'Região', 'Product ID': 'ID do Produto', 'Category': 'Categoria', 'Sub-Category': 'Subcategoria',
-        'Product Name': 'Nome do Produto', 'Sales': 'Vendas', 'Quantity': 'Quantidade', 'Discount': 'Desconto',
-        'Profit': 'Lucro', 'Profit Margin': 'Margem de Lucro', 'Month': 'Mês', 'Year': 'Ano'
+    # Traduzindo valores das colunas 'Region', 'Category' e 'Sub-Category'
+    region_translation = {
+        'Northeast': 'Nordeste',
+        'South': 'Sul',
+        'Midwest': 'Centro-Oeste',
+        'West': 'Oeste',
+        'Central': 'Centro',
+        'East': 'Leste'
     }
-    df = df.rename(columns=traducoes)
-    
-    # Tradução de valores nas colunas 'Category' e 'Sub-Category'
-    categoria_dict = {'Furniture': 'Móveis', 'Office Supplies': 'Suprimentos de Escritório', 'Technology': 'Tecnologia'}
-    subcategoria_dict = {
-        'Binders': 'Pastas', 'Bookcases': 'Estantes', 'Chairs': 'Cadeiras', 'Computers': 'Computadores', 'Copiers': 'Copiadoras',
-        'Envelopes': 'Envelopes', 'Fasteners': 'Grampeadores', 'Furnishings': 'Mobiliário', 'Labels': 'Rótulos',
-        'Machines': 'Máquinas', 'Paper': 'Papel', 'Phones': 'Telefones', 'Storage': 'Armazenamento', 'Supplies': 'Suprimentos', 'Tables': 'Mesas'
+
+    category_translation = {
+        'Furniture': 'Móveis',
+        'Office Supplies': 'Suprimentos de Escritório',
+        'Technology': 'Tecnologia'
     }
-    
-    df['Categoria'] = df['Categoria'].map(categoria_dict)
-    df['Subcategoria'] = df['Subcategoria'].map(subcategoria_dict)
-    
+
+    subcategory_translation = {
+        'Binders': 'Pastas',
+        'Bookcases': 'Estantes',
+        'Chairs': 'Cadeiras',
+        'Copiers': 'Copiadoras',
+        'Envelopes': 'Envelopes',
+        'Labels': 'Etiquetas',
+        'Machines': 'Máquinas',
+        'Paper': 'Papel',
+        'Storage': 'Armazenamento',
+        'Phones': 'Telefones',
+        'Art': 'Arte',
+        'Appliances': 'Eletrodomésticos'
+    }
+
+    # Aplicando a tradução nas colunas correspondentes
+    df['Região'] = df['Região'].map(region_translation)
+    df['Categoria'] = df['Categoria'].map(category_translation)
+    df['Subcategoria'] = df['Subcategoria'].map(subcategory_translation)
+
     return df
 
 df = load_data()
@@ -702,19 +716,19 @@ with tab5:
         'Vermont': 'Northeast', 'Virginia': 'South', 'Washington': 'West', 'West Virginia': 'South',
         'Wisconsin': 'Midwest', 'Wyoming': 'West'
     }
-    if 'Region' not in df.columns:
-        df['Region'] = df['State'].map(state_to_region)
+    if 'Região' not in df.columns:
+        df['Região'] = df['Estado'].map(state_to_region)
     
     # Define as cores para as regiões (mesmo que nem todas sejam usadas)
     region_colors = {
-        'Northeast': '#1f77b4',  # Azul
-        'South': '#ff7f0e',      # Laranja
-        'Midwest': '#2ca02c',    # Verde
-        'West': '#d62728',       # Vermelho
-        'Central': '#9467bd',    # Roxo
-        'East': '#8c564b'        # Marrom
-    }
-    
+            'Nordeste': '#1f77b4',  # Azul
+            'Sul': '#ff7f0e',       # Laranja
+            'Centro-Oeste': '#2ca02c',  # Verde
+            'Oeste': '#d62728',     # Vermelho
+            'Centro': '#9467bd',    # Roxo
+            'Leste': '#8c564b'      # Marrom
+        }
+        
     alpha_val = 0.8  # Transparência para as barras
     
 with tab6:
