@@ -722,23 +722,36 @@ with tab6:
     # Gráfico 1: Top 10 Estados com Maior Prejuízo
     st.markdown("### Top 10 Estados com Maior Prejuízo")
     fig1, ax1 = plt.subplots(figsize=(12, 6))
+    
     # Agrupa os dados por estado e região e soma os lucros
     state_profit = df.groupby(['State', 'Region'])['Profit'].sum().reset_index()
     top_states = state_profit.nsmallest(10, 'Profit')
-    barplot1 = sns.barplot(data=top_states, x='Profit', y='State', hue='Region', palette=region_colors, ax=ax1)
-    # Define alpha para as barras
+    
+    # Estilização do gráfico
+    sns.set_style("whitegrid")
+    barplot1 = sns.barplot(
+        data=top_states, 
+        x='Profit', 
+        y='State', 
+        hue='Region', 
+        palette=region_colors, 
+        ax=ax1,
+        edgecolor='black',
+        linewidth=1.2
+    )
+    
     for patch in ax1.patches:
-        patch.set_alpha(alpha_val)
-    ax1.axvline(0, color='black', linestyle='--', linewidth=1)
-    # Adiciona os valores em cima das barras
+        patch.set_alpha(0.85)
+    
+    ax1.axvline(0, color='gray', linestyle='--', linewidth=1)
     for p in ax1.patches:
         x = p.get_width()
         y = p.get_y() + p.get_height() / 2
-        ax1.text(x, y, f'{x:,.0f}', ha='left', va='center', fontsize=12, color='black')
+        ax1.text(x, y, f'{x:,.0f}', ha='left', va='center', fontsize=10, color='black')
+    
     ax1.xaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{x/1000:.0f}K'))
-    ax1.set_xlabel('Lucro Total (K)', fontsize=14)
+    ax1.set_xlabel('Lucro Total (K)', fontsize=12, fontweight='bold')
     ax1.set_ylabel('')
-    ax1.set_title('Top 10 Estados com Maior Prejuízo', fontsize=18, fontweight='bold')
     sns.despine()
     fig1.tight_layout()
     st.pyplot(fig1)
@@ -765,7 +778,6 @@ with tab6:
     ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda y, _: f'{y/1000:.0f}K'))
     ax2.set_xlabel('Região', fontsize=14)
     ax2.set_ylabel('Vendas Totais (K)', fontsize=14)
-    ax2.set_title('Vendas Totais por Região', fontsize=18, fontweight='bold')
     sns.despine()
     fig2.tight_layout()
     st.pyplot(fig2)
@@ -823,7 +835,6 @@ with tab6:
     adjust_text_position(cluster_2_states, ax3, 'green')
     
     # Ajustando o gráfico
-    ax3.set_title("Clusterização dos Estados por Desempenho", fontsize=18, fontweight='bold')
     ax3.set_xlabel("Vendas Totais (K)", fontsize=14)
     ax3.set_ylabel("Lucro Total (K)", fontsize=14)
     
