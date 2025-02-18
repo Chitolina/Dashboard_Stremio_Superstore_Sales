@@ -405,6 +405,7 @@ with tab3:
     st.markdown("---")
 
         # Seção 2 - Comparação de Vendas e Lucros por Categoria
+    # Seção 2 - Comparação de Vendas e Lucros por Categoria
     st.markdown("""
     ###  Top 8 Subcategorias
     #### Maiores vendas, lucros e margens
@@ -432,16 +433,19 @@ with tab3:
     bars_vendas = ax.bar(x_pos - bar_width/2, top8_Vendas['Vendas'], width=bar_width, label='Vendas', color='#4C72B0', alpha=0.85, edgecolor='white', linewidth=1.5)
     bars_lucro = ax.bar(x_pos + bar_width/2, top8_Vendas['Lucro'], width=bar_width, label='Lucro', color='#55A868', alpha=0.85, edgecolor='white', linewidth=1.5)
     
-    # Adicionar rótulos dentro das barras
+    # Adicionar valores absolutos dentro das barras (preto e menor)
     for bar in bars_vendas:
-        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height()/2, f"${bar.get_height()/1000:.1f}k", ha='center', va='center', fontsize=12, color='white', fontweight='bold')
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height()/2, f"${bar.get_height()/1000:.1f}k", 
+                ha='center', va='center', fontsize=10, color='black')
     
     for bar in bars_lucro:
-        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height()/2, f"${bar.get_height()/1000:.1f}k", ha='center', va='center', fontsize=12, color='white', fontweight='bold')
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height()/2, f"${bar.get_height()/1000:.1f}k", 
+                ha='center', va='center', fontsize=10, color='black')
     
-    # Adicionar rótulos da margem de lucro no topo das barras
+    # Adicionar margem de lucro no topo das barras (vermelho)
     for i, margem in enumerate(top8_Vendas['Margem_Lucro']):
-        ax.text(i, max(top8_Vendas.loc[i, ['Vendas', 'Lucro']]) + 5000, f"{margem:.1f}%", ha='center', fontsize=12, color='black', fontweight='bold')
+        ax.text(i, max(top8_Vendas.loc[i, ['Vendas', 'Lucro']]) + 5000, f"{margem:.1f}%", 
+                ha='center', fontsize=12, color='red', fontweight='bold')
     
     # Ajustar visualização
     ax.set_xticks(x_pos)
@@ -451,8 +455,12 @@ with tab3:
     # Formatar os valores no eixo y
     ax.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{x/1000:.1f}k'))
     
+    # Criar segunda legenda para a Margem de Lucro
+    from matplotlib.lines import Line2D
+    legend_margem = Line2D([0], [0], color='red', lw=0, marker='o', markersize=8, label='Margem de Lucro (%)')
+    
     # Melhorar a legenda e posicionamento
-    ax.legend(title="Métrica", fontsize=14, title_fontsize=16, loc='upper left')
+    ax.legend(handles=[bars_vendas, bars_lucro, legend_margem], title="Métrica", fontsize=14, title_fontsize=16, loc='upper left')
     
     # Título mais atrativo
     ax.set_title('Comparação de Vendas, Lucro e Margem - Top 8 Subcategorias', fontsize=18, pad=20)
