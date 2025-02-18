@@ -44,7 +44,7 @@ def load_data():
 
     category_translation = {
         'Furniture': 'Móveis',
-        'Office Supplies': 'Suprimentos de Escritório',
+        'Office Supplies': 'Escritório',
         'Technology': 'Tecnologia'
     }
 
