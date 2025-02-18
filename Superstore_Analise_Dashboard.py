@@ -7,7 +7,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 
-st.set_page_config(page_title="Dashboard Superstore", page_icon=":bar_chart:", layout="wide")
+st.set_page_config(page_title="Dashboard Superstore", page_icon=":bar_chart:")
 st.markdown("""
     <style>
     body {
