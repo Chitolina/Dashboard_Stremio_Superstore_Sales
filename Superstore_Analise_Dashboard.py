@@ -15,49 +15,45 @@ def load_data():
     #path = r"C:\Python_projetos\Superstore_df\df\Sample_Superstore.csv"
     #df = pd.read_csv(path, delimiter=',', encoding='latin1')
 
-    # Arquivo no git
+    # URL do arquivo
     url = 'https://raw.githubusercontent.com/Chitolina/Dashboard_Stremio_Superstore_Sales/main/df/Sample_Superstore.csv'
     df = pd.read_csv(url, delimiter=',', encoding='latin1')
     
     # Função para corrigir datas
     def corrigir_data(data_str):
-        try: return pd.to_datetime(data_str, format='%d/%m/%Y')
-        except ValueError:
-            try: return pd.to_datetime(data_str, format='%m/%d/%Y')
-            except ValueError: return pd.NaT
+        for fmt in ['%d/%m/%Y', '%m/%d/%Y']:
+            try: return pd.to_datetime(data_str, format=fmt)
+            except ValueError: continue
+        return pd.NaT
     
+    # Tratamento de datas e criação de novas colunas
     df['Order Date'] = df['Order Date'].apply(corrigir_data)
     df = df.dropna(subset=['Order Date'])
     df['Month'] = df['Order Date'].dt.month
     df['Year'] = df['Order Date'].dt.year
     df['Profit Margin'] = df['Profit'] / df['Sales']  # Nova coluna
     
-    # Traduzindo as colunas
-    df = df.rename(columns={
-        'Order ID': 'ID da Ordem',
-        'Order Date': 'Data da Ordem',
-        'Ship Date': 'Data de Envio',
-        'Ship Mode': 'Modo de Envio',
-        'Customer ID': 'ID do Cliente',
-        'Customer Name': 'Nome do Cliente',
-        'Segment': 'Segmento',
-        'Country': 'País',
-        'City': 'Cidade',
-        'State': 'Estado',
-        'Postal Code': 'Código Postal',
-        'Region': 'Região',
-        'Product ID': 'ID do Produto',
-        'Category': 'Categoria',
-        'Sub-Category': 'Subcategoria',
-        'Product Name': 'Nome do Produto',
-        'Sales': 'Vendas',
-        'Quantity': 'Quantidade',
-        'Discount': 'Desconto',
-        'Profit': 'Lucro',
-        'Profit Margin': 'Margem de Lucro',
-        'Month': 'Mês',
-        'Year': 'Ano'
-    })
+    # Tradução das colunas
+    traducoes = {
+        'Order ID': 'ID da Ordem', 'Order Date': 'Data da Ordem', 'Ship Date': 'Data de Envio',
+        'Ship Mode': 'Modo de Envio', 'Customer ID': 'ID do Cliente', 'Customer Name': 'Nome do Cliente',
+        'Segment': 'Segmento', 'Country': 'País', 'City': 'Cidade', 'State': 'Estado', 'Postal Code': 'Código Postal',
+        'Region': 'Região', 'Product ID': 'ID do Produto', 'Category': 'Categoria', 'Sub-Category': 'Subcategoria',
+        'Product Name': 'Nome do Produto', 'Sales': 'Vendas', 'Quantity': 'Quantidade', 'Discount': 'Desconto',
+        'Profit': 'Lucro', 'Profit Margin': 'Margem de Lucro', 'Month': 'Mês', 'Year': 'Ano'
+    }
+    df = df.rename(columns=traducoes)
+    
+    # Tradução de valores nas colunas 'Category' e 'Sub-Category'
+    categoria_dict = {'Furniture': 'Móveis', 'Office Supplies': 'Suprimentos de Escritório', 'Technology': 'Tecnologia'}
+    subcategoria_dict = {
+        'Binders': 'Pastas', 'Bookcases': 'Estantes', 'Chairs': 'Cadeiras', 'Computers': 'Computadores', 'Copiers': 'Copiadoras',
+        'Envelopes': 'Envelopes', 'Fasteners': 'Grampeadores', 'Furnishings': 'Mobiliário', 'Labels': 'Rótulos',
+        'Machines': 'Máquinas', 'Paper': 'Papel', 'Phones': 'Telefones', 'Storage': 'Armazenamento', 'Supplies': 'Suprimentos', 'Tables': 'Mesas'
+    }
+    
+    df['Categoria'] = df['Categoria'].map(categoria_dict)
+    df['Subcategoria'] = df['Subcategoria'].map(subcategoria_dict)
     
     return df
 
@@ -690,7 +686,37 @@ with tab5:
             use_container_width=True
         )
 
-
+    # Mapeamento de Região:
+    state_to_region = {
+        'Alabama': 'South', 'Alaska': 'West', 'Arizona': 'West', 'Arkansas': 'South',
+        'California': 'West', 'Colorado': 'West', 'Connecticut': 'Northeast', 'Delaware': 'South',
+        'Florida': 'South', 'Georgia': 'South', 'Hawaii': 'West', 'Idaho': 'West',
+        'Illinois': 'Midwest', 'Indiana': 'Midwest', 'Iowa': 'Midwest', 'Kansas': 'Midwest',
+        'Kentucky': 'South', 'Louisiana': 'South', 'Maine': 'Northeast', 'Maryland': 'South',
+        'Massachusetts': 'Northeast', 'Michigan': 'Midwest', 'Minnesota': 'Midwest', 'Mississippi': 'South',
+        'Missouri': 'Midwest', 'Montana': 'West', 'Nebraska': 'Midwest', 'Nevada': 'West',
+        'New Hampshire': 'Northeast', 'New Jersey': 'Northeast', 'New Mexico': 'West', 'New York': 'Northeast',
+        'North Carolina': 'South', 'North Dakota': 'Midwest', 'Ohio': 'Midwest', 'Oklahoma': 'South',
+        'Oregon': 'West', 'Pennsylvania': 'Northeast', 'Rhode Island': 'Northeast', 'South Carolina': 'South',
+        'South Dakota': 'Midwest', 'Tennessee': 'South', 'Texas': 'South', 'Utah': 'West',
+        'Vermont': 'Northeast', 'Virginia': 'South', 'Washington': 'West', 'West Virginia': 'South',
+        'Wisconsin': 'Midwest', 'Wyoming': 'West'
+    }
+    if 'Region' not in df.columns:
+        df['Region'] = df['State'].map(state_to_region)
+    
+    # Define as cores para as regiões (mesmo que nem todas sejam usadas)
+    region_colors = {
+        'Northeast': '#1f77b4',  # Azul
+        'South': '#ff7f0e',      # Laranja
+        'Midwest': '#2ca02c',    # Verde
+        'West': '#d62728',       # Vermelho
+        'Central': '#9467bd',    # Roxo
+        'East': '#8c564b'        # Marrom
+    }
+    
+    alpha_val = 0.8  # Transparência para as barras
+    
 with tab6:
     st.markdown("## Análise Regional Estratégica")
     sns.set_style("whitegrid")
