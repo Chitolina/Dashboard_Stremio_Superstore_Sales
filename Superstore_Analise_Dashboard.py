@@ -4,6 +4,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
+import StandardScaler
+
 
 st.set_page_config(page_title="Dashboard Superstore" ) # layout="wide"
 sns.set_style("whitegrid")
