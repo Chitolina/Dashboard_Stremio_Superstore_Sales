@@ -422,23 +422,29 @@ with tab3:
     bar_width = 0.3  
     y_pos = np.arange(len(top8_Vendas))
     
-    # Criar barras de vendas e lucros
-    ax.barh(y_pos - bar_width/2, top8_Vendas['Vendas'], height=bar_width, label='Vendas', color='#4C72B0', alpha=0.85)
-    ax.barh(y_pos + bar_width/2, top8_Vendas['Lucro'], height=bar_width, label='Lucro', color='#55A868', alpha=0.85)
+    # Usar a paleta original, mas adicionar alpha e margens nas barras
+    ax.barh(y_pos - bar_width/2, top8_Vendas['Vendas'], height=bar_width, label='Vendas', color='#4C72B0', alpha=0.85, edgecolor='white', linewidth=1.5)
+    ax.barh(y_pos + bar_width/2, top8_Vendas['Lucro'], height=bar_width, label='Lucro', color='#55A868', alpha=0.85, edgecolor='white', linewidth=1.5)
     
     # Adicionar rótulos nas barras
     for bar in ax.patches:
-        ax.text(bar.get_width() + 3000, bar.get_y() + bar.get_height()/2, f"${bar.get_width()/1000:.1f}k", va='center', fontsize=14)
+        ax.text(bar.get_width() + 5000, bar.get_y() + bar.get_height()/2, f"${bar.get_width()/1000:.1f}k", va='center', fontsize=12, color='black')
     
     # Ajustar visualização
     ax.set_yticks(y_pos)
     ax.set_yticklabels(top8_Vendas['Label'], fontsize=14)
-    ax.set_xlabel('Valor em $', fontsize=16)
-    # ax.set_title('Comparação de Vendas e Lucro - Top 8 Subcategorias', fontsize=18, pad=20)
+    ax.set_xlabel('Valor em $ (em k)', fontsize=16)
     
-    # Colocar a legenda fora do gráfico (à direita)
+    # Formatar os valores no eixo x
+    ax.xaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{x/1000:.1f}k'))
+    
+    # Melhorar a legenda e posicionamento
     ax.legend(title="Métrica", fontsize=14, title_fontsize=16, loc='upper left', bbox_to_anchor=(1, 1), ncol=1)
     
+    # Título mais atrativo
+    ax.set_title('Comparação de Vendas e Lucro - Top 8 Subcategorias', fontsize=18, pad=20)
+    
+    # Adicionar grid no eixo x e remover bordas
     ax.grid(axis='x', linestyle='--', alpha=0.5)
     sns.despine(left=True, bottom=True)
     
