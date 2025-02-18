@@ -12,7 +12,7 @@ sns.set_style("whitegrid")
 @st.cache_data
 def load_data():
     # URL do arquivo
-    url = 'https://raw.githubusercontent.com/Chitolina/Dashboard_Stremio_Superstore_Vendas/main/df/Sample_Superstore.csv'
+    url = 'https://raw.githubusercontent.com/Chitolina/Dashboard_Stremio_Superstore_Sales/main/df/Sample_Superstore.csv'
     df = pd.read_csv(url, delimiter=',', encoding='latin1')
     
     # Função para corrigir datas
