@@ -7,8 +7,15 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 
-
-st.set_page_config(page_title="Dashboard Superstore" ) # layout="wide"
+st.set_page_config(page_title="Dashboard Superstore", page_icon=":bar_chart:", layout="wide", initial_sidebar_state="expanded")
+st.markdown("""
+    <style>
+    body {
+        background-color: #f0f0f5;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+#st.set_page_config(page_title="Dashboard Superstore" ) # layout="wide"
 sns.set_style("whitegrid")
 
 # Função para carregar dados com cache
