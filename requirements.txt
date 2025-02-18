@@ -6,3 +6,4 @@ numpy
 statsmodels
 openpyxl
 requests
+scikit-learn
