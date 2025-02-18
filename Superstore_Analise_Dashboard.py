@@ -680,192 +680,192 @@ with tab5:
 
     
 
- with tab6:
-        st.markdown("## Análise Regional Estratégica")
-        sns.set_style("whitegrid")
-        sns.set_context("talk")
-        
-        # ====================================================
-        # Gráfico 1: Top 10 Estados com Maior Prejuízo
-        st.markdown("### Top 10 Estados com Maior Prejuízo")
-        fig1, ax1 = plt.subplots(figsize=(12, 6))
-        # Agrupa os dados por estado e região e soma os lucros
-        state_profit = df.groupby(['State', 'Region'])['Profit'].sum().reset_index()
-        top_states = state_profit.nsmallest(10, 'Profit')
-        barplot1 = sns.barplot(data=top_states, x='Profit', y='State', hue='Region', palette=region_colors, ax=ax1)
-        # Define alpha para as barras
-        for patch in ax1.patches:
-            patch.set_alpha(alpha_val)
-        ax1.axvline(0, color='black', linestyle='--', linewidth=1)
-        # Adiciona os valores em cima das barras
-        for p in ax1.patches:
-            x = p.get_width()
-            y = p.get_y() + p.get_height() / 2
-            ax1.text(x, y, f'{x:,.0f}', ha='left', va='center', fontsize=12, color='black')
-        ax1.xaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{x/1000:.0f}K'))
-        ax1.set_xlabel('Lucro Total (K)', fontsize=14)
-        ax1.set_ylabel('')
-        ax1.set_title('Top 10 Estados com Maior Prejuízo', fontsize=18, fontweight='bold')
-        sns.despine()
-        fig1.tight_layout()
-        st.pyplot(fig1)
-        
-        # Insights para o gráfico 1
-        st.markdown("#### Insights:")
-        st.markdown("""
-        - Os 10 estados com maior prejuízo mostram que existem áreas mais difíceis para o negócio alavancar, como influência de custos operacionais ou baixa demanda;
-        - A correlação entre as perdas de lucro e as regiões ajuda a identificar áreas com maior necessidade de intervenção.
-        """)
-        
-        # ====================================================
-        # Gráfico 2: Desempenho de Vendas por Região
-        st.markdown("### Desempenho de Vendas por Região")
-        sales_by_region = df.groupby('Region')[['Sales', 'Profit']].sum().reset_index().sort_values(by='Sales', ascending=False)
-        fig2, ax2 = plt.subplots(figsize=(10, 6))
-        barplot2 = sns.barplot(data=sales_by_region, x='Region', y='Sales', palette=region_colors, ax=ax2)
-        for patch in ax2.patches:
-            patch.set_alpha(alpha_val)
-        # Adiciona os valores sobre as barras
-        for p in ax2.patches:
-            height = p.get_height()
-            ax2.text(p.get_x() + p.get_width() / 2., height, f'{height:,.0f}', ha='center', va='bottom', fontsize=12, color='black')
-        ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda y, _: f'{y/1000:.0f}K'))
-        ax2.set_xlabel('Região', fontsize=14)
-        ax2.set_ylabel('Vendas Totais (K)', fontsize=14)
-        ax2.set_title('Vendas Totais por Região', fontsize=18, fontweight='bold')
-        sns.despine()
-        fig2.tight_layout()
-        st.pyplot(fig2)
+with tab6:
+    st.markdown("## Análise Regional Estratégica")
+    sns.set_style("whitegrid")
+    sns.set_context("talk")
     
-        # Insights para o gráfico 2
-        st.markdown("#### Insights:")
-        st.markdown("""
-        - Uma análise mais detalhada sobre o lucro pode revelar margens de venda mais ou menos eficientes em diferentes regiões, não adianta olhar apenas a venda, sem ver o lucro.
-        """)
+    # ====================================================
+    # Gráfico 1: Top 10 Estados com Maior Prejuízo
+    st.markdown("### Top 10 Estados com Maior Prejuízo")
+    fig1, ax1 = plt.subplots(figsize=(12, 6))
+    # Agrupa os dados por estado e região e soma os lucros
+    state_profit = df.groupby(['State', 'Region'])['Profit'].sum().reset_index()
+    top_states = state_profit.nsmallest(10, 'Profit')
+    barplot1 = sns.barplot(data=top_states, x='Profit', y='State', hue='Region', palette=region_colors, ax=ax1)
+    # Define alpha para as barras
+    for patch in ax1.patches:
+        patch.set_alpha(alpha_val)
+    ax1.axvline(0, color='black', linestyle='--', linewidth=1)
+    # Adiciona os valores em cima das barras
+    for p in ax1.patches:
+        x = p.get_width()
+        y = p.get_y() + p.get_height() / 2
+        ax1.text(x, y, f'{x:,.0f}', ha='left', va='center', fontsize=12, color='black')
+    ax1.xaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f'{x/1000:.0f}K'))
+    ax1.set_xlabel('Lucro Total (K)', fontsize=14)
+    ax1.set_ylabel('')
+    ax1.set_title('Top 10 Estados com Maior Prejuízo', fontsize=18, fontweight='bold')
+    sns.despine()
+    fig1.tight_layout()
+    st.pyplot(fig1)
+    
+    # Insights para o gráfico 1
+    st.markdown("#### Insights:")
+    st.markdown("""
+    - Os 10 estados com maior prejuízo mostram que existem áreas mais difíceis para o negócio alavancar, como influência de custos operacionais ou baixa demanda;
+    - A correlação entre as perdas de lucro e as regiões ajuda a identificar áreas com maior necessidade de intervenção.
+    """)
+    
+    # ====================================================
+    # Gráfico 2: Desempenho de Vendas por Região
+    st.markdown("### Desempenho de Vendas por Região")
+    sales_by_region = df.groupby('Region')[['Sales', 'Profit']].sum().reset_index().sort_values(by='Sales', ascending=False)
+    fig2, ax2 = plt.subplots(figsize=(10, 6))
+    barplot2 = sns.barplot(data=sales_by_region, x='Region', y='Sales', palette=region_colors, ax=ax2)
+    for patch in ax2.patches:
+        patch.set_alpha(alpha_val)
+    # Adiciona os valores sobre as barras
+    for p in ax2.patches:
+        height = p.get_height()
+        ax2.text(p.get_x() + p.get_width() / 2., height, f'{height:,.0f}', ha='center', va='bottom', fontsize=12, color='black')
+    ax2.yaxis.set_major_formatter(mtick.FuncFormatter(lambda y, _: f'{y/1000:.0f}K'))
+    ax2.set_xlabel('Região', fontsize=14)
+    ax2.set_ylabel('Vendas Totais (K)', fontsize=14)
+    ax2.set_title('Vendas Totais por Região', fontsize=18, fontweight='bold')
+    sns.despine()
+    fig2.tight_layout()
+    st.pyplot(fig2)
+
+    # Insights para o gráfico 2
+    st.markdown("#### Insights:")
+    st.markdown("""
+    - Uma análise mais detalhada sobre o lucro pode revelar margens de venda mais ou menos eficientes em diferentes regiões, não adianta olhar apenas a venda, sem ver o lucro.
+    """)
+    
+    # Adicionando legenda para os estados
+    st.markdown("#### Clusterização dos Estados por Desempenho")
+    
+    # ====================================================
+    # Gráfico 3: Clusterização dos Estados por Desempenho
+    # Agrupar os dados por estado e região
+    cluster_data = df.groupby(['State', 'Region']).agg({'Sales': 'sum', 'Profit': 'sum'}).reset_index()
+    # Calculando a margem
+    cluster_data['Margin'] = (cluster_data['Profit'] / cluster_data['Sales']) * 100
+    
+    # Normalizando os dados para clusterização
+    features = cluster_data[['Sales', 'Profit', 'Margin']]
+    scaler = StandardScaler()
+    features_scaled = scaler.fit_transform(features)
+    
+    # Aplicando KMeans para clusterização
+    kmeans = KMeans(n_clusters=3, random_state=42)
+    cluster_data['Cluster'] = kmeans.fit_predict(features_scaled)
+    
+    # Gerando o gráfico de clusterização
+    fig3, ax3 = plt.subplots(figsize=(12, 8))
+    
+    # Scatter plot com base no cluster
+    scatter = sns.scatterplot(data=cluster_data, x='Sales', y='Profit', hue='Cluster', palette="Set1", s=150, ax=ax3, alpha=0.7)
+    
+    # Identificando os centroids
+    centroids = kmeans.cluster_centers_
+    centroids = scaler.inverse_transform(centroids)
+    
+    # Identificando os estados exemplares para cada cluster
+    cluster_0_states = cluster_data[cluster_data['Cluster'] == 0].head(2)
+    cluster_1_states = cluster_data[cluster_data['Cluster'] == 1].head(2)
+    cluster_2_states = cluster_data[cluster_data['Cluster'] == 2].head(2)
+    
+    # Função para ajustar os textos e bolinhas
+    def adjust_text_position(state_data, ax, cluster_color):
+        for _, row in state_data.iterrows():
+            ax.scatter(row['Sales'], row['Profit'], s=150, color=cluster_color, alpha=0.7)  # Bolinhas com a cor do cluster
+            # Ajustando o texto para que os nomes não se sobreponham
+            ax.text(row['Sales'], row['Profit'] + 150, row['State'], fontsize=10, ha='center', color='black', fontweight='light')
+    
+    # Adicionando as bolinhas maiores com nomes dos estados
+    adjust_text_position(cluster_0_states, ax3, 'red')
+    adjust_text_position(cluster_1_states, ax3, 'blue')
+    adjust_text_position(cluster_2_states, ax3, 'green')
+    
+    # Ajustando o gráfico
+    ax3.set_title("Clusterização dos Estados por Desempenho", fontsize=18, fontweight='bold')
+    ax3.set_xlabel("Vendas Totais (K)", fontsize=14)
+    ax3.set_ylabel("Lucro Total (K)", fontsize=14)
+    
+    # Formatação dos eixos para exibir valores em K
+    ax3.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x/1000:.0f}K'))
+    ax3.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f'{y/1000:.0f}K'))
+    
+    # Removendo a legenda de clusters do gráfico
+    ax3.get_legend().remove()
+    
+    sns.despine()
+    fig3.tight_layout()
+    st.pyplot(fig3)
+    
+    # Insights para o gráfico 3
+    st.markdown("#### Insights:")
+    st.markdown("""
+    - Foram utilizadas as variáveis de margem de lucro, lucro e venda para a clusterização;
+    - A clusterização dos estados permite identificar padrões de desempenho semelhantes entre eles, o que ajuda no uso de estratégias direcionadas à cada grupo;
+    ### Cluster 0 (Azul):
+    Cluster com vendas moderadas e lucros razoáveis. Os estados que estão nesse cluster não estão nem entre os mais baixos nem entre os mais altos em vendas e lucro. Isso poderia ser indicado por uma combinação de vendas médias e margem razoável.
+    
+    ### Cluster 1 (Vermelho):
+    Se a venda for razoável, mas o lucro negativo, então este cluster pode indicar problemas de margem. Margens de lucro são pequenas ou até negativas, sugerindo um custo mais alto em relação à receita.
+    
+    ### Cluster 2 (Verde):
+    Este cluster parece ter altas vendas e lucros elevados, o que significa que são os estados mais bem-sucedidos, onde tanto as receitas quanto o lucro estão em alta.
+    Todavia, a clusterização colocou apenas dois estados nesse cluster, quase como se fossem muito excepcionais em relação aos outros.
+    """)
+    
+    # ====================================================
+    # Gráfico 4: Heatmap de Correlações por Região (em gráficos pequenos lado a lado)
+    
+    st.markdown("### Heatmap de Correlações por Região")
+    
+    # Supondo que 'df' seja seu DataFrame com as colunas 'Sales', 'Profit', 'State', e 'Region'
+    # Vamos agrupar os dados por região e calcular as correlações entre 'Sales' e 'Profit' para cada uma
+    
+    # Criando uma lista de regiões para iterar
+    regions = df['Region'].unique()
+    
+    # Definindo o número de colunas de subgráficos (para exibir lado a lado)
+    n_cols = len(regions)
+    fig, axes = plt.subplots(1, n_cols, figsize=(5 * n_cols, 5))  # Ajuste de tamanho para o número de regiões
+    
+    # Iterando por cada região para calcular as correlações e gerar o heatmap
+    for i, region in enumerate(regions):
+        region_data = df[df['Region'] == region]
         
-        # Adicionando legenda para os estados
-        st.markdown("#### Clusterização dos Estados por Desempenho")
+        # Calculando a matriz de correlação para 'Sales' e 'Profit'
+        corr_matrix = region_data[['Sales', 'Profit']].corr()
         
-        # ====================================================
-        # Gráfico 3: Clusterização dos Estados por Desempenho
-        # Agrupar os dados por estado e região
-        cluster_data = df.groupby(['State', 'Region']).agg({'Sales': 'sum', 'Profit': 'sum'}).reset_index()
-        # Calculando a margem
-        cluster_data['Margin'] = (cluster_data['Profit'] / cluster_data['Sales']) * 100
-        
-        # Normalizando os dados para clusterização
-        features = cluster_data[['Sales', 'Profit', 'Margin']]
-        scaler = StandardScaler()
-        features_scaled = scaler.fit_transform(features)
-        
-        # Aplicando KMeans para clusterização
-        kmeans = KMeans(n_clusters=3, random_state=42)
-        cluster_data['Cluster'] = kmeans.fit_predict(features_scaled)
-        
-        # Gerando o gráfico de clusterização
-        fig3, ax3 = plt.subplots(figsize=(12, 8))
-        
-        # Scatter plot com base no cluster
-        scatter = sns.scatterplot(data=cluster_data, x='Sales', y='Profit', hue='Cluster', palette="Set1", s=150, ax=ax3, alpha=0.7)
-        
-        # Identificando os centroids
-        centroids = kmeans.cluster_centers_
-        centroids = scaler.inverse_transform(centroids)
-        
-        # Identificando os estados exemplares para cada cluster
-        cluster_0_states = cluster_data[cluster_data['Cluster'] == 0].head(2)
-        cluster_1_states = cluster_data[cluster_data['Cluster'] == 1].head(2)
-        cluster_2_states = cluster_data[cluster_data['Cluster'] == 2].head(2)
-        
-        # Função para ajustar os textos e bolinhas
-        def adjust_text_position(state_data, ax, cluster_color):
-            for _, row in state_data.iterrows():
-                ax.scatter(row['Sales'], row['Profit'], s=150, color=cluster_color, alpha=0.7)  # Bolinhas com a cor do cluster
-                # Ajustando o texto para que os nomes não se sobreponham
-                ax.text(row['Sales'], row['Profit'] + 150, row['State'], fontsize=10, ha='center', color='black', fontweight='light')
-        
-        # Adicionando as bolinhas maiores com nomes dos estados
-        adjust_text_position(cluster_0_states, ax3, 'red')
-        adjust_text_position(cluster_1_states, ax3, 'blue')
-        adjust_text_position(cluster_2_states, ax3, 'green')
-        
-        # Ajustando o gráfico
-        ax3.set_title("Clusterização dos Estados por Desempenho", fontsize=18, fontweight='bold')
-        ax3.set_xlabel("Vendas Totais (K)", fontsize=14)
-        ax3.set_ylabel("Lucro Total (K)", fontsize=14)
-        
-        # Formatação dos eixos para exibir valores em K
-        ax3.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x/1000:.0f}K'))
-        ax3.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f'{y/1000:.0f}K'))
-        
-        # Removendo a legenda de clusters do gráfico
-        ax3.get_legend().remove()
-        
-        sns.despine()
-        fig3.tight_layout()
-        st.pyplot(fig3)
-        
-        # Insights para o gráfico 3
-        st.markdown("#### Insights:")
-        st.markdown("""
-        - Foram utilizadas as variáveis de margem de lucro, lucro e venda para a clusterização;
-        - A clusterização dos estados permite identificar padrões de desempenho semelhantes entre eles, o que ajuda no uso de estratégias direcionadas à cada grupo;
-        ### Cluster 0 (Azul):
-        Cluster com vendas moderadas e lucros razoáveis. Os estados que estão nesse cluster não estão nem entre os mais baixos nem entre os mais altos em vendas e lucro. Isso poderia ser indicado por uma combinação de vendas médias e margem razoável.
-        
-        ### Cluster 1 (Vermelho):
-        Se a venda for razoável, mas o lucro negativo, então este cluster pode indicar problemas de margem. Margens de lucro são pequenas ou até negativas, sugerindo um custo mais alto em relação à receita.
-        
-        ### Cluster 2 (Verde):
-        Este cluster parece ter altas vendas e lucros elevados, o que significa que são os estados mais bem-sucedidos, onde tanto as receitas quanto o lucro estão em alta.
-        Todavia, a clusterização colocou apenas dois estados nesse cluster, quase como se fossem muito excepcionais em relação aos outros.
-        """)
-        
-        # ====================================================
-        # Gráfico 4: Heatmap de Correlações por Região (em gráficos pequenos lado a lado)
-        
-        st.markdown("### Heatmap de Correlações por Região")
-        
-        # Supondo que 'df' seja seu DataFrame com as colunas 'Sales', 'Profit', 'State', e 'Region'
-        # Vamos agrupar os dados por região e calcular as correlações entre 'Sales' e 'Profit' para cada uma
-        
-        # Criando uma lista de regiões para iterar
-        regions = df['Region'].unique()
-        
-        # Definindo o número de colunas de subgráficos (para exibir lado a lado)
-        n_cols = len(regions)
-        fig, axes = plt.subplots(1, n_cols, figsize=(5 * n_cols, 5))  # Ajuste de tamanho para o número de regiões
-        
-        # Iterando por cada região para calcular as correlações e gerar o heatmap
-        for i, region in enumerate(regions):
-            region_data = df[df['Region'] == region]
-            
-            # Calculando a matriz de correlação para 'Sales' e 'Profit'
-            corr_matrix = region_data[['Sales', 'Profit']].corr()
-            
-            # Plotando o heatmap
-            sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0, fmt='.2f', linewidths=2, vmin=-1, vmax=1, ax=axes[i])
-            axes[i].set_title(f'Relação {region}', fontsize=12)
-            axes[i].set_xticklabels(axes[i].get_xticklabels(), rotation=45, ha='right')
-            axes[i].set_yticklabels(axes[i].get_yticklabels(), rotation=45, va='top')
-        
-        # Ajustando o layout para melhor visualização
-        plt.tight_layout()
-        
-        # Exibindo o gráfico
-        st.pyplot(fig)
-        
-        # Insights para o gráfico 4
-        st.markdown("#### Insights:")
-        st.markdown("""
-        - **Correlação forte (positiva ou negativa)**: Nas três regiões com correlação forte, pode-se observar que existe uma relação clara entre as vendas e o lucro. Isso indica que as mudanças em uma variável (vendas) afetam diretamente o lucro. Uma alta correlação positiva sugere que vendas mais altas geram mais lucro, enquanto uma correlação negativa indica que aumentos em vendas podem diminuir o lucro (talvez devido a custos elevados).
-          
-        - **Correlação fraca**: Em uma das regiões, a correlação entre vendas e lucro é fraca ou inexistente. Isso pode indicar que, embora as vendas aumentem, elas não estão impactando de maneira significativa o lucro, sugerindo um problema de eficiência nos custos ou margens muito baixas. Em alguns casos, isso pode sinalizar a necessidade de revisar a estratégia de vendas ou os custos operacionais nessa região.
-        
-        - **Impacto Estratégico**: A análise dessas correlações pode ajudar a identificar onde os esforços de vendas são mais eficazes, bem como áreas onde melhorias na gestão de custos ou na estratégia de precificação podem ser necessárias para melhorar a rentabilidade.
-        
-        - **Ações Recomendas**: 
-          - Para as regiões com correlação forte, é recomendável continuar incentivando o aumento de vendas, já que isso tende a impactar positivamente o lucro.
-          - Para a região com correlação fraca, seria interessante investigar mais a fundo as razões para o baixo impacto das vendas sobre o lucro, como custos elevados ou margens pequenas, e avaliar possíveis estratégias de melhoria.
-        """)
+        # Plotando o heatmap
+        sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0, fmt='.2f', linewidths=2, vmin=-1, vmax=1, ax=axes[i])
+        axes[i].set_title(f'Relação {region}', fontsize=12)
+        axes[i].set_xticklabels(axes[i].get_xticklabels(), rotation=45, ha='right')
+        axes[i].set_yticklabels(axes[i].get_yticklabels(), rotation=45, va='top')
+    
+    # Ajustando o layout para melhor visualização
+    plt.tight_layout()
+    
+    # Exibindo o gráfico
+    st.pyplot(fig)
+    
+    # Insights para o gráfico 4
+    st.markdown("#### Insights:")
+    st.markdown("""
+    - **Correlação forte (positiva ou negativa)**: Nas três regiões com correlação forte, pode-se observar que existe uma relação clara entre as vendas e o lucro. Isso indica que as mudanças em uma variável (vendas) afetam diretamente o lucro. Uma alta correlação positiva sugere que vendas mais altas geram mais lucro, enquanto uma correlação negativa indica que aumentos em vendas podem diminuir o lucro (talvez devido a custos elevados).
+      
+    - **Correlação fraca**: Em uma das regiões, a correlação entre vendas e lucro é fraca ou inexistente. Isso pode indicar que, embora as vendas aumentem, elas não estão impactando de maneira significativa o lucro, sugerindo um problema de eficiência nos custos ou margens muito baixas. Em alguns casos, isso pode sinalizar a necessidade de revisar a estratégia de vendas ou os custos operacionais nessa região.
+    
+    - **Impacto Estratégico**: A análise dessas correlações pode ajudar a identificar onde os esforços de vendas são mais eficazes, bem como áreas onde melhorias na gestão de custos ou na estratégia de precificação podem ser necessárias para melhorar a rentabilidade.
+    
+    - **Ações Recomendas**: 
+      - Para as regiões com correlação forte, é recomendável continuar incentivando o aumento de vendas, já que isso tende a impactar positivamente o lucro.
+      - Para a região com correlação fraca, seria interessante investigar mais a fundo as razões para o baixo impacto das vendas sobre o lucro, como custos elevados ou margens pequenas, e avaliar possíveis estratégias de melhoria.
+    """)
 
