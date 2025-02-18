@@ -14,11 +14,10 @@ def load_data():
     # Arquivo local
     #path = r"C:\Python_projetos\Superstore_df\df\Sample_Superstore.csv"
     #df = pd.read_csv(path, delimiter=',', encoding='latin1')
+
     # Arquivo no git
     url = 'https://raw.githubusercontent.com/Chitolina/Dashboard_Stremio_Superstore_Sales/main/df/Sample_Superstore.csv'
     df = pd.read_csv(url, delimiter=',', encoding='latin1')
-
-
     
     # Função para corrigir datas
     def corrigir_data(data_str):
@@ -32,6 +31,34 @@ def load_data():
     df['Month'] = df['Order Date'].dt.month
     df['Year'] = df['Order Date'].dt.year
     df['Profit Margin'] = df['Profit'] / df['Sales']  # Nova coluna
+    
+    # Traduzindo as colunas
+    df = df.rename(columns={
+        'Order ID': 'ID da Ordem',
+        'Order Date': 'Data da Ordem',
+        'Ship Date': 'Data de Envio',
+        'Ship Mode': 'Modo de Envio',
+        'Customer ID': 'ID do Cliente',
+        'Customer Name': 'Nome do Cliente',
+        'Segment': 'Segmento',
+        'Country': 'País',
+        'City': 'Cidade',
+        'State': 'Estado',
+        'Postal Code': 'Código Postal',
+        'Region': 'Região',
+        'Product ID': 'ID do Produto',
+        'Category': 'Categoria',
+        'Sub-Category': 'Subcategoria',
+        'Product Name': 'Nome do Produto',
+        'Sales': 'Vendas',
+        'Quantity': 'Quantidade',
+        'Discount': 'Desconto',
+        'Profit': 'Lucro',
+        'Profit Margin': 'Margem de Lucro',
+        'Month': 'Mês',
+        'Year': 'Ano'
+    })
+    
     return df
 
 df = load_data()
@@ -146,7 +173,7 @@ with tab1:
     st.markdown("## Mapa de Correlações")
     
     # Criando colunas para dividir a tela
-    col1, col2 = st.columns([1,1.5])  # Ajuste as proporções conforme necessário
+    col1, col2 = st.columns([1, 1.5])  # Ajuste as proporções conforme necessário
     
     with col1:
         st.markdown("""
@@ -161,7 +188,7 @@ with tab1:
         
         # Criando o heatmap com valores maiores e mais escuros
         sns.heatmap(
-            df[['Sales', 'Profit', 'Discount', 'Quantity']].corr(),
+            df[['Vendas', 'Lucro', 'Desconto', 'Quantidade']].corr(),
             annot=True, cmap='viridis', fmt='.2f',
             linewidths=0.5, linecolor='white',
             annot_kws={"size": 12, "color": "black"}  # Tamanho maior e cor preta
@@ -198,6 +225,7 @@ with tab1:
 
 
 
+
 # Segunda aba ===========================================================================
 with tab2:
     st.markdown("## Análise de Rentabilidade")
@@ -215,9 +243,9 @@ with tab2:
     """)
     
     fig1, ax1 = plt.subplots(figsize=(14, 8))
-    sns.scatterplot(data=df, x='Sales', y='Profit', hue='Category', 
+    sns.scatterplot(data=df, x='Vendas', y='Lucro', hue='Categoria', 
                     palette='plasma', alpha=0.7, s=200, edgecolor='black', linewidth=1.5)
-    sns.regplot(data=df, x='Sales', y='Profit', scatter=False, 
+    sns.regplot(data=df, x='Vendas', y='Lucro', scatter=False, 
                 color='red', line_kws={'linewidth':2, 'linestyle':'--'})
     
     formatter = mtick.FuncFormatter(lambda x, _: f'{x/1000:.0f}k')
@@ -243,7 +271,7 @@ with tab2:
     """)
     
     fig2, ax2 = plt.subplots(figsize=(10, 5))
-    barplot = sns.barplot(data=df, x='Category', y='Profit Margin', 
+    barplot = sns.barplot(data=df, x='Categoria', y='Margem de Lucro', 
                           palette='plasma', alpha=0.7, estimator=np.mean)
     
     # Adiciona os valores médios dentro de cada barra
@@ -258,7 +286,6 @@ with tab2:
     plt.ylabel('Margem Média', fontsize=12)
     plt.xticks(rotation=45)
     st.pyplot(fig2)
-
 # Rodapé ===========================================================================
 
 st.markdown("---")
@@ -275,26 +302,26 @@ with tab3:
     st.markdown("""
     ### Venda absoluta e lucro absoluto por categoria
     Ao trazer os valores absolutos depois de termos visto a margem de lucro, conseguimos visualizar qual categoria gera mais lucro em termos absolutos.
-    Nesse caso o a margem e lucro seguiram condizentes com as categorias, mas poderia haver o caso de uma categoria ter margem maior, porém não vender tanto e, assim,
+    Nesse caso a margem e lucro seguiram condizentes com as categorias, mas poderia haver o caso de uma categoria ter margem maior, porém não vender tanto e, assim,
     apresentar menos lucro que outra.
     """)
     
     # Calcular Vendas e Lucro por Categoria
-    sales_profit_by_category = df.groupby('Category')[['Sales', 'Profit']].sum().reset_index()
+    sales_profit_by_category = df.groupby('Categoria')[['Vendas', 'Lucro']].sum().reset_index()
     
     # Criar gráfico de barras lado a lado
     fig1, ax1 = plt.subplots(figsize=(12, 6))
     bar_width = 0.35
-    categories = sales_profit_by_category['Category']
+    categories = sales_profit_by_category['Categoria']
     x = np.arange(len(categories))  # Posições das barras
     
     # Definir cores mais suaves e harmoniosas
     colors = ['#4C72B0', '#55A868']  # Azul e verde
     
     # Criar barras lado a lado
-    bars1 = ax1.bar(x - bar_width/2, sales_profit_by_category['Sales'], width=bar_width, 
+    bars1 = ax1.bar(x - bar_width/2, sales_profit_by_category['Vendas'], width=bar_width, 
                     label='Vendas', color=colors[0], alpha=0.85)
-    bars2 = ax1.bar(x + bar_width/2, sales_profit_by_category['Profit'], width=bar_width, 
+    bars2 = ax1.bar(x + bar_width/2, sales_profit_by_category['Lucro'], width=bar_width, 
                     label='Lucro', color=colors[1], alpha=0.85)
     
     # Adicionar rótulos com melhor posicionamento
@@ -330,10 +357,10 @@ with tab3:
     """)
     
     # Calcular vendas e lucros por subcategoria
-    top8_sales = df.groupby(['Category', 'Sub-Category'])[['Sales', 'Profit']].sum().nlargest(8, 'Sales').reset_index()
+    top8_sales = df.groupby(['Categoria', 'Subcategoria'])[['Vendas', 'Lucro']].sum().nlargest(8, 'Vendas').reset_index()
     
     # Criar rótulo combinando Subcategoria + Categoria
-    top8_sales['Label'] = top8_sales['Sub-Category'] + " (" + top8_sales['Category'] + ")"
+    top8_sales['Label'] = top8_sales['Subcategoria'] + " (" + top8_sales['Categoria'] + ")"
     
     # Gráfico
     fig, ax = plt.subplots(figsize=(14, 8))  
@@ -341,8 +368,8 @@ with tab3:
     y_pos = np.arange(len(top8_sales))
     
     # Criar barras de vendas e lucros
-    ax.barh(y_pos - bar_width/2, top8_sales['Sales'], height=bar_width, label='Vendas', color='#4C72B0', alpha=0.85)
-    ax.barh(y_pos + bar_width/2, top8_sales['Profit'], height=bar_width, label='Lucro', color='#55A868', alpha=0.85)
+    ax.barh(y_pos - bar_width/2, top8_sales['Vendas'], height=bar_width, label='Vendas', color='#4C72B0', alpha=0.85)
+    ax.barh(y_pos + bar_width/2, top8_sales['Lucro'], height=bar_width, label='Lucro', color='#55A868', alpha=0.85)
     
     # Adicionar rótulos nas barras
     for bar in ax.patches:
@@ -366,9 +393,6 @@ with tab3:
         
     st.markdown("---")
 
-
-    
-        
     # Seção 3 - Produtos Problemáticos
     st.markdown("""
     ### Identificação de produtos pouco performáticos: 
@@ -376,21 +400,21 @@ with tab3:
     """)
     
     # Calcular dados
-    top_sales = df.groupby('Sub-Category').agg({'Sales':'sum', 'Profit':'sum'}).reset_index()
+    top_sales = df.groupby('Subcategoria').agg({'Vendas':'sum', 'Lucro':'sum'}).reset_index()
     
     # Calcular a porcentagem de lucro sobre as vendas
-    top_sales['Profit Margin %'] = (top_sales['Profit'] / top_sales['Sales']) * 100
+    top_sales['Margem de Lucro %'] = (top_sales['Lucro'] / top_sales['Vendas']) * 100
     
     # Plotar gráfico
     fig3, ax3 = plt.subplots(figsize=(14, 6))
-    scatter = sns.scatterplot(data=top_sales, x='Sales', y='Profit', 
-                             hue='Sub-Category', size='Sales', sizes=(50, 500),
+    scatter = sns.scatterplot(data=top_sales, x='Vendas', y='Lucro', 
+                             hue='Subcategoria', size='Vendas', sizes=(50, 500),
                              palette='Paired', alpha=0.7, edgecolor='black')
     
     # Adicionar as porcentagens de lucro acima das bolinhas com tamanho menor e mais acima
     for i, row in top_sales.iterrows():
-        ax3.text(row['Sales'], row['Profit'] + 4000,
-                 f"{row['Profit Margin %']:.1f}%", 
+        ax3.text(row['Vendas'], row['Lucro'] + 4000,
+                 f"{row['Margem de Lucro %']:.1f}%", 
                  horizontalalignment='center', verticalalignment='center', 
                  fontsize=8, fontweight='bold', alpha=0.6, color='black') 
     
@@ -412,6 +436,7 @@ with tab3:
     - Promoções mal planejadas.
     """)
 
+
 # Quarta aba ===========================================================================
 with tab4:
     st.markdown("""
@@ -420,21 +445,21 @@ with tab4:
                     """)
     
     # Processar dados
-    df['Discount_bins'] = pd.cut(df['Discount'], bins=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 1], 
+    df['Faixa_Desconto'] = pd.cut(df['Desconto'], bins=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 1], 
                                  labels=['0-10%', '10-20%', '20-30%', '30-40%', '40-50%', '50%+'])
     
     # Calcular média e mediana por faixa de desconto
-    discount_analysis = df.groupby('Discount_bins')['Profit'].agg(['mean', 'median']).reset_index()
+    discount_analysis = df.groupby('Faixa_Desconto')['Lucro'].agg(['mean', 'median']).reset_index()
     
     # Criar o gráfico
     fig2, ax2 = plt.subplots(figsize=(12, 6))
     
     # Gráfico de média
-    sns.lineplot(data=discount_analysis, x='Discount_bins', y='mean', 
+    sns.lineplot(data=discount_analysis, x='Faixa_Desconto', y='mean', 
                  marker='o', markersize=10, color='#FF4500', linewidth=2.5, label='Média')
     
     # Gráfico de mediana
-    sns.lineplot(data=discount_analysis, x='Discount_bins', y='median', 
+    sns.lineplot(data=discount_analysis, x='Faixa_Desconto', y='median', 
                  marker='o', markersize=10, color='#1f77b4', linewidth=2.5, label='Mediana')
     
     # Linha de referência destacada
@@ -467,7 +492,7 @@ with tab4:
     st.markdown("---")
     
     # Contar a quantidade de transações por faixa
-    discount_counts = df['Discount_bins'].value_counts().reset_index()
+    discount_counts = df['Faixa_Desconto'].value_counts().reset_index()
     discount_counts.columns = ['Faixa de Desconto', 'Número de Transações']
     
     # Ordenar as faixas de desconto
@@ -498,25 +523,25 @@ with tab4:
     """)
     
     # Remover outliers (por exemplo, valores acima de 3 desvios padrão)
-    cleaned_data = df[(df['Profit'] < df['Profit'].mean() + 3 * df['Profit'].std()) &
-                      (df['Profit'] > df['Profit'].mean() - 3 * df['Profit'].std())]
+    cleaned_data = df[(df['Lucro'] < df['Lucro'].mean() + 3 * df['Lucro'].std()) &
+                      (df['Lucro'] > df['Lucro'].mean() - 3 * df['Lucro'].std())]
     
     # Processar dados
-    cleaned_data['Discount_bins'] = pd.cut(cleaned_data['Discount'], bins=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 1], 
+    cleaned_data['Faixa_Desconto'] = pd.cut(cleaned_data['Desconto'], bins=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 1], 
                                            labels=['0-10%', '10-20%', '20-30%', '30-40%', '40-50%', '50%+'])
     
     # Calcular média e mediana por faixa de desconto
-    discount_analysis = cleaned_data.groupby('Discount_bins')['Profit'].agg(['mean', 'median']).reset_index()
+    discount_analysis = cleaned_data.groupby('Faixa_Desconto')['Lucro'].agg(['mean', 'median']).reset_index()
     
     # Criar o gráfico
     fig2, ax2 = plt.subplots(figsize=(12, 6))
     
     # Gráfico de média
-    sns.lineplot(data=discount_analysis, x='Discount_bins', y='mean', 
+    sns.lineplot(data=discount_analysis, x='Faixa_Desconto', y='mean', 
                  marker='o', markersize=10, color='#FF4500', linewidth=2.5, label='Média')
     
     # Gráfico de mediana
-    sns.lineplot(data=discount_analysis, x='Discount_bins', y='median', 
+    sns.lineplot(data=discount_analysis, x='Faixa_Desconto', y='median', 
                  marker='o', markersize=10, color='#1f77b4', linewidth=2.5, label='Mediana')
     
     # Linha de referência destacada
@@ -533,15 +558,14 @@ with tab4:
     # Exibir no Streamlit
     st.pyplot(fig2)
     
-    
     st.markdown("---")
 
-      # Boxplot - Identificação de Outliers e Dispersão
-    st.markdown("####  Boxplot: Distribuição do Lucro por Faixa de Desconto")
+    # Boxplot - Identificação de Outliers e Dispersão
+    st.markdown("#### Boxplot: Distribuição do Lucro por Faixa de Desconto")
     fig1, ax1 = plt.subplots(figsize=(12, 6))  # Ajustando o tamanho para ser igual aos outros gráficos
     
     # Customizando o boxplot
-    sns.boxplot(x='Discount_bins', y='Profit', data=cleaned_data, ax=ax1, 
+    sns.boxplot(x='Faixa_Desconto', y='Lucro', data=cleaned_data, ax=ax1, 
                 palette='coolwarm', width=0.5, linewidth=1.5)
     
     # Customizando os rótulos do eixo X
@@ -564,6 +588,7 @@ with tab4:
 
 
 
+
     
 # Quinta aba ===========================================================================
 
@@ -575,34 +600,31 @@ with tab5:
         ### Identificação de Clientes Rentáveis vs. Problemáticos
         
         O scatterplot abaixo ilustra a relação entre o volume total de vendas e o lucro gerado por cada cliente. 
-        Destaca-se os **3 clientes mais rentáveis** e os **3 menos rentáveis**, permitindo uma análise comparativa (será que existe um padrão de categorias preferíveis por eles?)
-        
-        Observa-se que a maioria dos clientes se concentra em uma faixa de lucro de até **2 mil**, associada a gastos de até **10 mil**. 
-        No entanto, há casos de clientes com gastos moderados que geram lucros baixos, assim como clientes com gastos elevados que contribuem significativamente para o lucro. 
+        Destaca-se os **3 clientes mais rentáveis** e os **3 menos rentáveis**, permitindo uma análise comparativa.
     """)
     
-    # Processar dados
-    customer_profit = df.groupby('Customer Name').agg({'Sales':'sum', 'Profit':'sum'}).reset_index()
-    top_3 = customer_profit.nlargest(3, 'Profit')
-    bottom_3 = customer_profit.nsmallest(3, 'Profit')
+    # Processar dados (ajustado para novos nomes de colunas)
+    cliente_lucro = df.groupby('Nome do Cliente').agg({'Vendas':'sum', 'Lucro':'sum'}).reset_index()
+    top_3 = cliente_lucro.nlargest(3, 'Lucro')
+    bottom_3 = cliente_lucro.nsmallest(3, 'Lucro')
     
     # Plotar gráfico
     fig, ax = plt.subplots(figsize=(14, 8))
     scatter = sns.scatterplot(
-        data=customer_profit, x='Sales', y='Profit', 
-        hue='Profit', size='Profit', palette='rocket_r',
+        data=cliente_lucro, x='Vendas', y='Lucro', 
+        hue='Lucro', size='Lucro', palette='rocket_r',
         sizes=(50, 500), alpha=0.7, edgecolor='black'
     )
     
     # Destacar top/bottom
     for i in range(3):
-        ax.annotate(top_3['Customer Name'].iloc[i], 
-                   (top_3['Sales'].iloc[i], top_3['Profit'].iloc[i]),
+        ax.annotate(top_3['Nome do Cliente'].iloc[i], 
+                   (top_3['Vendas'].iloc[i], top_3['Lucro'].iloc[i]),
                    textcoords="offset points", xytext=(0,15), 
                    ha='center', fontsize=12, weight='bold', color='darkgreen')
         
-        ax.annotate(bottom_3['Customer Name'].iloc[i], 
-                   (bottom_3['Sales'].iloc[i], bottom_3['Profit'].iloc[i]),
+        ax.annotate(bottom_3['Nome do Cliente'].iloc[i], 
+                   (bottom_3['Vendas'].iloc[i], bottom_3['Lucro'].iloc[i]),
                    textcoords="offset points", xytext=(0,-20), 
                    ha='center', fontsize=12, weight='bold', color='darkred')
 
@@ -624,19 +646,19 @@ with tab5:
         Principais geradores de valor e % de consumo em cada categoria:
         """)
         
-        # Adicionando a porcentagem de consumo por categoria
-        customer_category_profit = df.groupby(['Customer Name', 'Category']).agg({'Sales':'sum'}).reset_index()
-        customer_category_profit['Percentage'] = customer_category_profit.groupby('Customer Name')['Sales'].transform(lambda x: (x / x.sum()) * 100)
-        top_3_categories = customer_category_profit[customer_category_profit['Customer Name'].isin(top_3['Customer Name'])]
+        # Adicionando a porcentagem de consumo por categoria (ajuste para novas colunas)
+        categoria_lucro_cliente = df.groupby(['Nome do Cliente', 'Categoria']).agg({'Vendas':'sum'}).reset_index()
+        categoria_lucro_cliente['Porcentagem'] = categoria_lucro_cliente.groupby('Nome do Cliente')['Vendas'].transform(lambda x: (x / x.sum()) * 100)
+        top_3_categorias = categoria_lucro_cliente[categoria_lucro_cliente['Nome do Cliente'].isin(top_3['Nome do Cliente'])]
         
         # Mostrar a tabela com categorias e porcentagens
-        top_3_display = top_3[['Customer Name', 'Sales', 'Profit']].rename(columns={'Customer Name':'Cliente', 'Sales':'Gasto Total', 'Profit':'Lucro'})
+        top_3_display = top_3[['Nome do Cliente', 'Vendas', 'Lucro']].rename(columns={'Nome do Cliente':'Cliente', 'Vendas':'Gasto Total', 'Lucro':'Lucro'})
         
         # Adicionar as porcentagens por categoria à tabela
-        for customer in top_3['Customer Name']:
-            categories = top_3_categories[top_3_categories['Customer Name'] == customer]
-            category_percentages = ', '.join([f"{row['Category']}: {row['Percentage']:.1f}%" for _, row in categories.iterrows()])
-            top_3_display.loc[top_3_display['Cliente'] == customer, 'Categorias (%)'] = category_percentages
+        for cliente in top_3['Nome do Cliente']:
+            categorias = top_3_categorias[top_3_categorias['Nome do Cliente'] == cliente]
+            categoria_percentages = ', '.join([f"{row['Categoria']}: {row['Porcentagem']:.1f}%" for _, row in categorias.iterrows()])
+            top_3_display.loc[top_3_display['Cliente'] == cliente, 'Categorias (%)'] = categoria_percentages
 
         st.dataframe(
             top_3_display.style.format({'Gasto Total':'${:.0f}', 'Lucro':'${:.0f}'}), 
@@ -651,16 +673,16 @@ with tab5:
         """)
         
         # Adicionando a porcentagem de consumo por categoria
-        bottom_3_categories = customer_category_profit[customer_category_profit['Customer Name'].isin(bottom_3['Customer Name'])]
+        bottom_3_categorias = categoria_lucro_cliente[categoria_lucro_cliente['Nome do Cliente'].isin(bottom_3['Nome do Cliente'])]
         
         # Mostrar a tabela com categorias e porcentagens
-        bottom_3_display = bottom_3[['Customer Name', 'Sales', 'Profit']].rename(columns={'Customer Name':'Cliente', 'Sales':'Gasto Total', 'Profit':'Lucro'})
+        bottom_3_display = bottom_3[['Nome do Cliente', 'Vendas', 'Lucro']].rename(columns={'Nome do Cliente':'Cliente', 'Vendas':'Gasto Total', 'Lucro':'Lucro'})
         
         # Adicionar as porcentagens por categoria à tabela
-        for customer in bottom_3['Customer Name']:
-            categories = bottom_3_categories[bottom_3_categories['Customer Name'] == customer]
-            category_percentages = ', '.join([f"{row['Category']}: {row['Percentage']:.1f}%" for _, row in categories.iterrows()])
-            bottom_3_display.loc[bottom_3_display['Cliente'] == customer, 'Categorias (%)'] = category_percentages
+        for cliente in bottom_3['Nome do Cliente']:
+            categorias = bottom_3_categorias[bottom_3_categorias['Nome do Cliente'] == cliente]
+            categoria_percentages = ', '.join([f"{row['Categoria']}: {row['Porcentagem']:.1f}%" for _, row in categorias.iterrows()])
+            bottom_3_display.loc[bottom_3_display['Cliente'] == cliente, 'Categorias (%)'] = categoria_percentages
 
         st.dataframe(
             bottom_3_display.style.format({'Gasto Total':'${:.0f}', 'Lucro':'${:.0f}'}), 
@@ -668,50 +690,6 @@ with tab5:
             use_container_width=True
         )
 
-    # Análise Estratégica
-    st.markdown("""
-    #### Insights:
-    1. **Clientes de Alto Risco**:  
-       - Mesmo com gasto significativo, geram prejuízo.
-    2. **Oportunidades de nos clientes medianos**:  
-       - Clientes rentáveis com gasto médio-alto podem ser melhor estudados.
-    """)
-
-
-    from sklearn.cluster import KMeans
-    from sklearn.preprocessing import StandardScaler
-    
-    # Supondo que 'df' seja seu DataFrame com as colunas: 'State', 'Sales' e 'Profit'
-    # Mapeamento de Região:
-    state_to_region = {
-        'Alabama': 'South', 'Alaska': 'West', 'Arizona': 'West', 'Arkansas': 'South',
-        'California': 'West', 'Colorado': 'West', 'Connecticut': 'Northeast', 'Delaware': 'South',
-        'Florida': 'South', 'Georgia': 'South', 'Hawaii': 'West', 'Idaho': 'West',
-        'Illinois': 'Midwest', 'Indiana': 'Midwest', 'Iowa': 'Midwest', 'Kansas': 'Midwest',
-        'Kentucky': 'South', 'Louisiana': 'South', 'Maine': 'Northeast', 'Maryland': 'South',
-        'Massachusetts': 'Northeast', 'Michigan': 'Midwest', 'Minnesota': 'Midwest', 'Mississippi': 'South',
-        'Missouri': 'Midwest', 'Montana': 'West', 'Nebraska': 'Midwest', 'Nevada': 'West',
-        'New Hampshire': 'Northeast', 'New Jersey': 'Northeast', 'New Mexico': 'West', 'New York': 'Northeast',
-        'North Carolina': 'South', 'North Dakota': 'Midwest', 'Ohio': 'Midwest', 'Oklahoma': 'South',
-        'Oregon': 'West', 'Pennsylvania': 'Northeast', 'Rhode Island': 'Northeast', 'South Carolina': 'South',
-        'South Dakota': 'Midwest', 'Tennessee': 'South', 'Texas': 'South', 'Utah': 'West',
-        'Vermont': 'Northeast', 'Virginia': 'South', 'Washington': 'West', 'West Virginia': 'South',
-        'Wisconsin': 'Midwest', 'Wyoming': 'West'
-    }
-    if 'Region' not in df.columns:
-        df['Region'] = df['State'].map(state_to_region)
-    
-    # Define as cores para as regiões (mesmo que nem todas sejam usadas)
-    region_colors = {
-        'Northeast': '#1f77b4',  # Azul
-        'South': '#ff7f0e',      # Laranja
-        'Midwest': '#2ca02c',    # Verde
-        'West': '#d62728',       # Vermelho
-        'Central': '#9467bd',    # Roxo
-        'East': '#8c564b'        # Marrom
-    }
-    
-    alpha_val = 0.8  # Transparência para as barras
 
 with tab6:
     st.markdown("## Análise Regional Estratégica")
@@ -724,16 +702,16 @@ with tab6:
     fig1, ax1 = plt.subplots(figsize=(12, 6))
     
     # Agrupa os dados por estado e região e soma os lucros
-    state_profit = df.groupby(['State', 'Region'])['Profit'].sum().reset_index()
-    top_states = state_profit.nsmallest(10, 'Profit')
+    state_profit = df.groupby(['Estado', 'Região'])['Lucro'].sum().reset_index()  # Ajustando nomes das colunas
+    top_states = state_profit.nsmallest(10, 'Lucro')  # Alterando para 'Lucro', conforme renomeação
     
     # Estilização do gráfico
     sns.set_style("whitegrid")
     barplot1 = sns.barplot(
         data=top_states, 
-        x='Profit', 
-        y='State', 
-        hue='Region', 
+        x='Lucro',  # Ajustando para a nova coluna
+        y='Estado',  # Ajustando para a nova coluna
+        hue='Região',  # Ajustando para a nova coluna
         palette=region_colors, 
         ax=ax1,
         edgecolor='black',
@@ -766,9 +744,9 @@ with tab6:
     # ====================================================
     # Gráfico 2: Desempenho de Vendas por Região
     st.markdown("### Desempenho de Vendas por Região")
-    sales_by_region = df.groupby('Region')[['Sales', 'Profit']].sum().reset_index().sort_values(by='Sales', ascending=False)
+    sales_by_region = df.groupby('Região')[['Vendas', 'Lucro']].sum().reset_index().sort_values(by='Vendas', ascending=False)  # Ajustando nomes das colunas
     fig2, ax2 = plt.subplots(figsize=(10, 6))
-    barplot2 = sns.barplot(data=sales_by_region, x='Region', y='Sales', palette=region_colors, ax=ax2)
+    barplot2 = sns.barplot(data=sales_by_region, x='Região', y='Vendas', palette=region_colors, ax=ax2)  # Alterando para 'Vendas'
     for patch in ax2.patches:
         patch.set_alpha(alpha_val)
     # Adiciona os valores sobre as barras
@@ -790,11 +768,12 @@ with tab6:
     
     # Adicionando legenda para os estados
     st.markdown("#### Clusterização dos Estados por Desempenho")
-    
+
     # ====================================================
     # Gráfico 3: Clusterização dos Estados por Desempenho
     # Agrupar os dados por estado e região
     cluster_data = df.groupby(['State', 'Region']).agg({'Sales': 'sum', 'Profit': 'sum'}).reset_index()
+
     # Calculando a margem
     cluster_data['Margin'] = (cluster_data['Profit'] / cluster_data['Sales']) * 100
     
@@ -826,7 +805,6 @@ with tab6:
     def adjust_text_position(state_data, ax, cluster_color):
         for _, row in state_data.iterrows():
             ax.scatter(row['Sales'], row['Profit'], s=150, color=cluster_color, alpha=0.7)  # Bolinhas com a cor do cluster
-            # Ajustando o texto para que os nomes não se sobreponham
             ax.text(row['Sales'], row['Profit'] + 150, row['State'], fontsize=10, ha='center', color='black', fontweight='light')
     
     # Adicionando as bolinhas maiores com nomes dos estados
@@ -869,10 +847,7 @@ with tab6:
     # Gráfico 4: Heatmap de Correlações por Região (em gráficos pequenos lado a lado)
     
     st.markdown("### Heatmap de Correlações por Região")
-    
-    # Supondo que 'df' seja seu DataFrame com as colunas 'Sales', 'Profit', 'State', e 'Region'
-    # Vamos agrupar os dados por região e calcular as correlações entre 'Sales' e 'Profit' para cada uma
-    
+
     # Criando uma lista de regiões para iterar
     regions = df['Region'].unique()
     
@@ -883,10 +858,10 @@ with tab6:
     # Iterando por cada região para calcular as correlações e gerar o heatmap
     for i, region in enumerate(regions):
         region_data = df[df['Region'] == region]
-        
+    
         # Calculando a matriz de correlação para 'Sales' e 'Profit'
         corr_matrix = region_data[['Sales', 'Profit']].corr()
-        
+    
         # Plotando o heatmap
         sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0, fmt='.2f', linewidths=2, vmin=-1, vmax=1, ax=axes[i])
         axes[i].set_title(f'Relação {region}', fontsize=12)
