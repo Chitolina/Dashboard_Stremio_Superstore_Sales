@@ -773,7 +773,7 @@ with tab6:
     # Insights para o gráfico 2
     st.markdown("#### Insights:")
     st.markdown("""
-    - Uma análise mais detalhada sobre o lucro pode revelar margens de venda mais ou menos eficientes em diferentes regiões, não adianta olhar apenas a venda, sem ver o lucro.
+    - Uma análise mais detalhada sobre o lucro pode revelar margens de venda mais ou menos eficientes em diferentes regiões, não adianta olhar apenas a venda sem ver o lucro.
     """)
     
     # Adicionando legenda para os estados
@@ -842,14 +842,14 @@ with tab6:
     st.markdown("#### Insights:")
     st.markdown("""
     - Foram utilizadas as variáveis de margem de lucro, lucro e venda para a clusterização;
-    - A clusterização dos estados permite identificar padrões de desempenho semelhantes entre eles, o que ajuda no uso de estratégias direcionadas à cada grupo;
-    ### Cluster 0 (Azul):
+    - A clusterização dos estados permite identificar padrões de desempenho semelhantes entre eles, o que ajuda no uso de estratégias direcionadas a cada grupo;
+    ##### Cluster 0 (Azul):
     Cluster com vendas moderadas e lucros razoáveis. Os estados que estão nesse cluster não estão nem entre os mais baixos nem entre os mais altos em vendas e lucro. Isso poderia ser indicado por uma combinação de vendas médias e margem razoável.
     
-    ### Cluster 1 (Vermelho):
+    ##### Cluster 1 (Vermelho):
     Se a venda for razoável, mas o lucro negativo, então este cluster pode indicar problemas de margem. Margens de lucro são pequenas ou até negativas, sugerindo um custo mais alto em relação à receita.
     
-    ### Cluster 2 (Verde):
+    ##### Cluster 2 (Verde):
     Este cluster parece ter altas vendas e lucros elevados, o que significa que são os estados mais bem-sucedidos, onde tanto as receitas quanto o lucro estão em alta.
     Todavia, a clusterização colocou apenas dois estados nesse cluster, quase como se fossem muito excepcionais em relação aos outros.
     """)
@@ -891,13 +891,13 @@ with tab6:
     # Insights para o gráfico 4
     st.markdown("#### Insights:")
     st.markdown("""
-    - **Correlação forte (positiva ou negativa)**: Nas três regiões com correlação forte, pode-se observar que existe uma relação clara entre as vendas e o lucro. Isso indica que as mudanças em uma variável (vendas) afetam diretamente o lucro. Uma alta correlação positiva sugere que vendas mais altas geram mais lucro, enquanto uma correlação negativa indica que aumentos em vendas podem diminuir o lucro (talvez devido a custos elevados).
+    - **Correlação forte**: Nas três regiões com correlação forte (todas exceto sul), existe uma relação clara entre as vendas e o lucro. Isso indica que as mudanças em uma variável (vendas) afetam diretamente o lucro. Uma alta correlação positiva sugere que vendas mais altas geram mais lucro, enquanto uma correlação negativa indica que aumentos em vendas podem diminuir o lucro (talvez devido a custos elevados).
       
-    - **Correlação fraca**: Em uma das regiões, a correlação entre vendas e lucro é fraca ou inexistente. Isso pode indicar que, embora as vendas aumentem, elas não estão impactando de maneira significativa o lucro, sugerindo um problema de eficiência nos custos ou margens muito baixas. Em alguns casos, isso pode sinalizar a necessidade de revisar a estratégia de vendas ou os custos operacionais nessa região.
+    - **Correlação fraca**: Na região sul, a correlação entre vendas e lucro é fraca ou inexistente. Isso pode indicar que, embora as vendas aumentem, elas não estão impactando de maneira significativa o lucro, sugerindo um problema de eficiência nos custos ou margens muito baixas. Em alguns casos, isso pode sinalizar a necessidade de revisar a estratégia de vendas ou os custos operacionais nessa região.
     
-    - **Impacto Estratégico**: A análise dessas correlações pode ajudar a identificar onde os esforços de vendas são mais eficazes, bem como áreas onde melhorias na gestão de custos ou na estratégia de precificação podem ser necessárias para melhorar a rentabilidade.
+    - **Impacto Estratégico**: A análise dessas correlações pode ajudar a identificar onde os esforços de vendas são mais eficazes, bem como medidas necessárias para melhorar a rentabilidade nas áreas de baixo desempenho.
     
-    - **Ações Recomendas**: 
-      - Para as regiões com correlação forte, é recomendável continuar incentivando o aumento de vendas, já que isso tende a impactar positivamente o lucro.
+    - **O que fazer?**: 
+      - Para as regiões com correlação forte, é recomendável continuar incentivando o aumento de vendas, já que isso tende a impactar positivamente o lucro;
       - Para a região com correlação fraca, seria interessante investigar mais a fundo as razões para o baixo impacto das vendas sobre o lucro, como custos elevados ou margens pequenas, e avaliar possíveis estratégias de melhoria.
     """)
