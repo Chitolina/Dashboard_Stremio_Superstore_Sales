@@ -102,9 +102,6 @@ def load_data():
 df = load_data()
 
 
-df = load_data()
-
-
 
 # Título principal
 st.title("Dashboard Analítico - Varejo")
