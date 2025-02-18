@@ -11,10 +11,11 @@ st.set_page_config(page_title="Dashboard Superstore", page_icon=":bar_chart:")
 st.markdown("""
     <style>
     body {
-        background-color: #f0f0f5;
+        background-color: #e0e0e0;
     }
     </style>
     """, unsafe_allow_html=True)
+
 
 #st.set_page_config(page_title="Dashboard Superstore" ) # layout="wide"
 sns.set_style("whitegrid")
