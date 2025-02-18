@@ -429,12 +429,19 @@ with tab3:
     x_pos = np.arange(len(top8_Vendas))
     
     # Barras verticais
-    ax.bar(x_pos - bar_width/2, top8_Vendas['Vendas'], width=bar_width, label='Vendas', color='#4C72B0', alpha=0.85, edgecolor='white', linewidth=1.5)
-    ax.bar(x_pos + bar_width/2, top8_Vendas['Lucro'], width=bar_width, label='Lucro', color='#55A868', alpha=0.85, edgecolor='white', linewidth=1.5)
+    bars_vendas = ax.bar(x_pos - bar_width/2, top8_Vendas['Vendas'], width=bar_width, label='Vendas', color='#4C72B0', alpha=0.85, edgecolor='white', linewidth=1.5)
+    bars_lucro = ax.bar(x_pos + bar_width/2, top8_Vendas['Lucro'], width=bar_width, label='Lucro', color='#55A868', alpha=0.85, edgecolor='white', linewidth=1.5)
     
-    # Adicionar rótulos da margem de lucro acima das barras
+    # Adicionar rótulos dentro das barras
+    for bar in bars_vendas:
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height()/2, f"${bar.get_height()/1000:.1f}k", ha='center', va='center', fontsize=12, color='white', fontweight='bold')
+    
+    for bar in bars_lucro:
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height()/2, f"${bar.get_height()/1000:.1f}k", ha='center', va='center', fontsize=12, color='white', fontweight='bold')
+    
+    # Adicionar rótulos da margem de lucro no topo das barras
     for i, margem in enumerate(top8_Vendas['Margem_Lucro']):
-        ax.text(i, max(top8_Vendas.loc[i, ['Vendas', 'Lucro']]) + 5000, f"{margem:.1f}%", ha='center', fontsize=12, color='red', fontweight='bold')
+        ax.text(i, max(top8_Vendas.loc[i, ['Vendas', 'Lucro']]) + 5000, f"{margem:.1f}%", ha='center', fontsize=12, color='black', fontweight='bold')
     
     # Ajustar visualização
     ax.set_xticks(x_pos)
