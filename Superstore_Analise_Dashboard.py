@@ -685,7 +685,7 @@ with tab4:
         - **A mediana do lucro pode cair conforme o desconto aumenta:**  
           Se a linha da mediana estiver abaixando conforme o desconto cresce, significa que, em média, os produtos vendidos com maior desconto geram menos lucro.  
     
-        - **Incógnita:**  
+        - **Dúvida:**  
           A faixa de descontos acima de 50% possui muitos outliers com lucro negativo, mas apresenta um volume de vendas muito maior do que a faixa de 40-50%. Isso pode parecer contraditório.  
           Algumas hipóteses para explicar esse comportamento:  
           - Apesar de mais produtos estarem no prejuízo na faixa de 50%+, os itens ainda rentáveis podem estar puxando a margem média para cima.  
@@ -699,7 +699,6 @@ with tab4:
     faixa_stats_interesse = faixa_stats.loc[['40-50%', '50%+']]
     
     # Exibir no Streamlit
-    st.markdown("#### Média e Mediana do Lucro por Faixa de Desconto")
     st.dataframe(faixa_stats_interesse)
 
     
