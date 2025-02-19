@@ -299,7 +299,7 @@ with tab2:
     
     fig1, ax1 = plt.subplots(figsize=(14, 8))
     sns.scatterplot(data=df, x='Vendas', y='Lucro', hue='Categoria', 
-                    palette="magma", alpha=0.8, s=250, edgecolor='black', linewidth=1)
+                    palette='rocket_r', sizes=(50, 300), alpha=0.8, edgecolor='black', linewidth=1) #s=250, 
     sns.regplot(data=df, x='Vendas', y='Lucro', scatter=False, 
                 color='red', line_kws={'linewidth':2, 'linestyle':'--'})
     
@@ -327,7 +327,7 @@ with tab2:
     
     fig2, ax2 = plt.subplots(figsize=(10, 5))
     barplot = sns.barplot(data=df, x='Categoria', y='Margem de Lucro', 
-                          palette="magma", alpha=0.8, estimator=np.mean)
+                          palette='rocket_r', alpha=0.8, estimator=np.mean)
     
     # Adiciona os valores médios dentro de cada barra
     for p in barplot.patches:
@@ -727,7 +727,7 @@ with tab5:
     scatter = sns.scatterplot(
         data=cliente_lucro, x='Vendas', y='Lucro', 
         hue='Lucro', size='Lucro', palette='rocket_r',
-        sizes=(50, 500), alpha=0.7, edgecolor='black'
+        sizes=(50, 500), alpha=0.8, edgecolor='black'
     )
     
     # Destacar top/bottom
