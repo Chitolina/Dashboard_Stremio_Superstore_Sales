@@ -244,7 +244,7 @@ with tab1:
         # Criando o heatmap com valores maiores e mais escuros
         sns.heatmap(
             df[['Vendas', 'Lucro', 'Desconto', 'Quantidade']].corr(),
-            annot=True, cmap='viridis', fmt='.2f',
+            annot=True, cmap='rocket', fmt='.2f',
             linewidths=0.5, linecolor='white',
             annot_kws={"size": 12, "color": "black"}  # Tamanho maior e cor preta
         )
@@ -299,7 +299,7 @@ with tab2:
     
     fig1, ax1 = plt.subplots(figsize=(14, 8))
     sns.scatterplot(data=df, x='Vendas', y='Lucro', hue='Categoria', 
-                    palette='viridis', alpha=0.7, s=200, edgecolor='black', linewidth=1.5)
+                    palette='rocket', alpha=0.7, s=200, edgecolor='black', linewidth=1.5)
     sns.regplot(data=df, x='Vendas', y='Lucro', scatter=False, 
                 color='red', line_kws={'linewidth':2, 'linestyle':'--'})
     
