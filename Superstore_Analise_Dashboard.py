@@ -667,9 +667,42 @@ with tab4:
     
     st.pyplot(fig1)
 
+    # Insights para o gráfico 2
+    st.markdown("#### Insights:")
+    st.markdown("""
+        #### Análise do Impacto dos Descontos no Lucro  
+        
+        - **Quanto maior o desconto, mais instável o lucro:**  
+          Se as faixas de desconto mais altas (30-40% e 40-50%) apresentam caixas e bigodes maiores no boxplot, significa que há uma grande variação nos lucros.  
+          Isso indica que os produtos vendidos com grandes descontos nem sempre dão prejuízo, mas oscilam bastante.  
+        
+        - **Descontos baixos tendem a ser mais seguros:**  
+          Se a faixa de desconto de 0-10% possui uma caixa pequena e poucos outliers, significa que os lucros nessa categoria são mais previsíveis e estáveis.  
+        
+        - **Prejuízos podem ser identificados:**  
+          A presença de muitos outliers negativos indica que algumas vendas com desconto resultaram em prejuízo.  
+        
+        - **A mediana do lucro pode cair conforme o desconto aumenta:**  
+          Se a linha da mediana estiver abaixando conforme o desconto cresce, significa que, em média, os produtos vendidos com maior desconto geram menos lucro.  
+        
+        - **Incógnita:**  
+          A faixa de descontos acima de 50% possui muitos outliers com lucro negativo, mas apresenta um volume de vendas muito maior do que a faixa de 40-50%. Isso pode parecer contraditório.  
+          Algumas hipóteses para explicar esse comportamento:  
+          - Apesar de mais produtos estarem no prejuízo na faixa de 50%+, os itens ainda rentáveis podem estar puxando a margem média para cima.  
+          - A faixa de 40-50% pode ter vendido menos unidades e, entre elas, algumas tiveram prejuízos mais expressivos, o que reduz a média.
 
+    """)
+    
 
-
+        # Agrupar por Faixa de Desconto e calcular os totais
+        desconto_stats = cleaned_data.groupby('Faixa_Desconto')[['Vendas', 'Lucro']].sum()
+        
+        # Filtrar apenas as faixas de interesse (40-50% e 50%+)
+        faixas_interesse = desconto_stats.loc[['40-50%', '50%+']]
+        
+        # Exibir a tabela no Streamlit
+        st.markdown("#### Total de Vendas e Lucro Absoluto por Faixa de Desconto")
+        st.dataframe(faixas_interesse)
     
 # Quinta aba ===========================================================================
 
