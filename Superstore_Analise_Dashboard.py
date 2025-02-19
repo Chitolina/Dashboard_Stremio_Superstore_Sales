@@ -692,15 +692,15 @@ with tab4:
           - A faixa de 40-50% pode ter vendido menos unidades e, entre elas, algumas tiveram prejuízos mais expressivos, o que reduz a média.
     """)
     
-    # Agrupar por Faixa de Desconto e calcular os totais
-    desconto_stats = cleaned_data.groupby('Faixa_Desconto')[['Vendas', 'Lucro']].sum()
+        # Calcular média e mediana de lucro por faixa de desconto
+    faixa_stats = cleaned_data.groupby('Faixa_Desconto')[['Lucro']].agg(['mean', 'median'])
     
-    # Filtrar apenas as faixas de interesse (40-50% e 50%+)
-    faixas_interesse = desconto_stats.loc[['40-50%', '50%+']]
+    # Filtrar para as faixas de interesse
+    faixa_stats_interesse = faixa_stats.loc[['40-50%', '50%+']]
     
-    # Exibir a tabela no Streamlit
-    st.markdown("#### Total de Vendas e Lucro Absoluto por Faixa de Desconto")
-    st.dataframe(faixas_interesse)
+    # Exibir no Streamlit
+    st.markdown("#### Média e Mediana do Lucro por Faixa de Desconto")
+    st.dataframe(faixa_stats_interesse)
 
     
 # Quinta aba ===========================================================================
