@@ -299,7 +299,7 @@ with tab2:
     
     fig1, ax1 = plt.subplots(figsize=(14, 8))
     sns.scatterplot(data=df, x='Vendas', y='Lucro', hue='Categoria', 
-                    palette='rocket_r', sizes=(50, 300), alpha=0.8, edgecolor='black', linewidth=1) #s=250, 
+                    palette='rocket_r',s=250,  alpha=0.8, edgecolor='black', linewidth=1) # 
     sns.regplot(data=df, x='Vendas', y='Lucro', scatter=False, 
                 color='red', line_kws={'linewidth':2, 'linestyle':'--'})
     
