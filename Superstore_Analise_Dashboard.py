@@ -688,8 +688,10 @@ with tab4:
         - **Dúvida:**  
           A faixa de descontos acima de 50% possui muitos outliers com lucro negativo, mas apresenta um volume de vendas muito maior do que a faixa de 40-50%. Isso pode parecer contraditório.  
           Algumas hipóteses para explicar esse comportamento:  
-          - Apesar de mais produtos estarem no prejuízo na faixa de 50%+, os itens ainda rentáveis podem estar puxando a margem média para cima.  
-          - A faixa de 40-50% pode ter vendido menos unidades e, entre elas, algumas tiveram prejuízos mais expressivos, o que reduz a média.
+          - Apesar de mais produtos estarem no prejuízo na faixa de 50%+, os itens ainda rentáveis podem estar puxando a margem média para cima;
+          - A faixa de 40-50% pode ter vendido menos unidades e, entre elas, algumas tiveram prejuízos mais expressivos, o que reduz a média;
+          - Se olharmos a média das duas faixas, o dado nos comprova as duas informações acima. 
+
     """)
     
         # Calcular média e mediana de lucro por faixa de desconto
@@ -991,30 +993,38 @@ with tab6:
     st.markdown("### Heatmap de Correlações por Região")
 
     # Criando uma lista de regiões para iterar
-    Regiãos = df['Região'].unique()
+    Regiões = df['Região'].unique()
     
     # Definindo o número de colunas de subgráficos (para exibir lado a lado)
-    n_cols = len(Regiãos)
-    fig, axes = plt.subplots(1, n_cols, figsize=(5 * n_cols, 5))  # Ajuste de tamanho para o número de regiões
+    # Definindo o número de colunas (2 por linha)
+    n_cols = 2
+    n_rows = int(np.ceil(len(Regiões) / n_cols))  # Calcula o número de linhas necessárias
+    
+    # Ajustando o tamanho da figura
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(5 * n_cols, 5 * n_rows))  # Ajuste de tamanho para o número de regiões
     
     # Iterando por cada região para calcular as correlações e gerar o heatmap
-    for i, Região in enumerate(Regiãos):
+    for i, Região in enumerate(Regiões):
         Região_data = df[df['Região'] == Região]
     
         # Calculando a matriz de correlação para 'Vendas' e 'Lucro'
         corr_matrix = Região_data[['Vendas', 'Lucro']].corr()
-    
+        
+        # Calculando a posição correta para o eixo
+        row, col = divmod(i, n_cols)
+        
         # Plotando o heatmap
-        sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0, fmt='.2f', linewidths=2, vmin=-1, vmax=1, ax=axes[i])
-        axes[i].set_title(f'Relação {Região}', fontsize=12)
-        axes[i].set_xticklabels(axes[i].get_xticklabels(), rotation=45, ha='right')
-        axes[i].set_yticklabels(axes[i].get_yticklabels(), rotation=45, va='top')
+        sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0, fmt='.2f', linewidths=2, vmin=-1, vmax=1, ax=axes[row, col])
+        axes[row, col].set_title(f'Relação {Região}', fontsize=12)
+        axes[row, col].set_xticklabels(axes[row, col].get_xticklabels(), rotation=45, ha='right')
+        axes[row, col].set_yticklabels(axes[row, col].get_yticklabels(), rotation=45, va='top')
     
     # Ajustando o layout para melhor visualização
     plt.tight_layout()
     
     # Exibindo o gráfico
     st.pyplot(fig)
+
     
     # Insights para o gráfico 4
     st.markdown("#### Insights:")
